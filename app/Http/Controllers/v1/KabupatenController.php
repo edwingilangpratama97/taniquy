@@ -4,6 +4,7 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Kabupaten;
 
 class KabupatenController extends Controller
 {
@@ -15,6 +16,15 @@ class KabupatenController extends Controller
     public function index()
     {
         //
+    }
+
+    public function getKabupaten($id)
+    {
+        $data = Kabupaten::where('provinsi_id',$id)->get();
+        return response()->json([
+            'code' => 200,
+            'data' => $data,
+        ]);
     }
 
     /**
