@@ -23,5 +23,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix'=>'v1','namespace'=>'v1'], function(){
 	Route::get('/dashboard','DashboardController@index')->name('dashboard');
 	Route::resource('kelompok','KelompokTaniController');
+	Route::resource('retailer','RetailerController');
 });
 

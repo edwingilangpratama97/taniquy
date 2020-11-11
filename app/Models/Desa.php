@@ -8,7 +8,7 @@ class Desa extends Model
 {
     protected $table = 'desas';
     protected $guarded = [];
-    
+
     public function kelompok()
     {
     	return $this->hasMany('App\Models\KelompokTani');
@@ -17,5 +17,10 @@ class Desa extends Model
     public function kecamatan()
     {
     	return $this->belongsTo('App\Models\Kecamatan','kecamatan_id');
+    }
+
+    public function retailer()
+    {
+        return $this->hasOne('App\Models\Retailer','id_desa','id');
     }
 }

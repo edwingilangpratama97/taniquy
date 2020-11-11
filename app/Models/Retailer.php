@@ -33,4 +33,8 @@ class Retailer extends Model
     {
     	return $this->hasMany('App\Models\Postingan');
     }
+    public function desa()
+    {
+        return $this->belongsTo('App\Models\Desa','id_desa');
+    }
 }
