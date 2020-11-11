@@ -6,18 +6,26 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class='sidebar-title'>Main Menu</li>
-                <li class="sidebar-item active ">
+                <li class="sidebar-item 
+                    {{ Request::is('v1/dashboard*') ? 'active' : false }}
+                ">
                     <a href="index.html" class='sidebar-link'>
                         <i data-feather="home" width="20"></i> 
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="sidebar-item  has-sub">
+                <li class="sidebar-item has-sub
+                    {{ Request::is('v1/kelompok*') ? 'active' : false }}
+                    {{ Request::is('v1/enduser*') ? 'active' : false }}
+                    {{ Request::is('v1/Jenis*') ? 'active' : false }}
+                    {{ Request::is('v1/grade*') ? 'active' : false }}
+                    {{ Request::is('v1/bts*') ? 'active' : false }}
+                    ">
                     <a href="#" class='sidebar-link'>
                         <i data-feather="database" width="20"></i> 
                         <span>Master Data</span>
                     </a>
-                    <ul class="submenu ">
+                    <ul class="submenu">
                         
                         <li>
                             <a href="{{route('kelompok.index')}}">Kelompok Tani</a>
