@@ -6,14 +6,14 @@
     <div class="row">
         <div class="col-12 col-md-6 order-md-1 order-last">
 
-            <h3>Retailer</h3>
-            <p class="text-subtitle text-muted">Data Retailer yang membeli Mangga dari kelompok tani</p>
+            <h3>Enduser</h3>
+            <p class="text-subtitle text-muted">Data Enduser yang membeli Mangga dari Retailer</p>
         </div>
         <div class="col-12 col-md-6 order-md-2 order-first">
             <nav aria-label="breadcrumb" class='breadcrumb-header'>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">Data Master</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Retailer</li>
+                    <li class="breadcrumb-item active" aria-current="page">Enduser</li>
                 </ol>
             </nav>
         </div>
@@ -44,7 +44,7 @@
 
 		    	</div>
 		    	<div class="col-6">
-				    <a href="{{route('retailer.create')}}" class="btn btn-success float-right">
+				    <a href="{{route('customer.create')}}" class="btn btn-success float-right">
 		            	<i class="mdi mdi-plus-circle-outline mdi-18px"></i> Tambah
 		            </a>
 		    	</div>
@@ -53,8 +53,8 @@
                 <thead>
                     <tr>
                     	<th>No</th>
-                        <th>Kode Retailer</th>
-                        <th>Nama Retailer</th>
+                        <th>Kode Enduser</th>
+                        <th>Nama Enduser</th>
                         <th>Lokasi</th>
                         <th>Kontak</th>
                         <th>Action</th>
@@ -78,10 +78,10 @@ let table = $('#data_table').DataTable({
     serverSide : true,
     ordering : false,
     pageLength : 10,
-    ajax : "{{ route('retailer.index') }}",
+    ajax : "{{ route('customer.index') }}",
       columns : [
         {data : 'DT_RowIndex', name: 'DT_RowIndex', searchable:false,orderable:false},
-        {data : 'kode_retailer', name: 'kode_retailer'},
+        {data : 'kode_enduser', name: 'kode_enduser'},
         {data : 'nama', name: 'nama'},
         {data : 'desa.nama', name: 'id_desa'},
         {data : 'kontak', name: 'kontak'},
