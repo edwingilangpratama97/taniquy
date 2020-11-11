@@ -35,6 +35,13 @@ class UserSeeder extends Seeder
         	'role' => 'retailer',
         	'password' => Hash::make('12341234'),
         ]);
+        User::create([
+        	'name' => 'Retailer1',
+        	'email' => 'retailer1@makerindo.com',
+        	'id_retailer' => 1,
+        	'role' => 'retailer',
+        	'password' => Hash::make('12341234'),
+        ]);
 
         User::create([
         	'name' => 'Enduser',
