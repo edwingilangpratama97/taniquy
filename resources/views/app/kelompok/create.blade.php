@@ -1,57 +1,130 @@
 @extends('app.layouts.index')
 
 @section('content')
+<style type="text/css">
+    #map {
+        width: 100%;
+        height: 400px;
+    }
+    .form-group .label {
+        font-size: 0.755rem;
+        text-transform: uppercase;
+        color: rgba(35, 28, 99, 0.7);
+        font-weight: 500;
+    }
+</style>
 <section id="basic-vertical-layouts">
 <div class="row match-height">
-    <div class="col-md-12 col-12">
+    <div class="col-md-6 col-12">
         <div class="card">
             <div class="card-header">
-            <h4 class="card-title">Vertical Form</h4>
+            <h4 class="card-title">Pilih Lokasi</h4>
             </div>
             <div class="card-content">
             <div class="card-body">
-                <form class="form form-vertical">
+                <div id="map"></div>
+                <button class="btn btn-primary btn-block mt-4" onclick="getLocation()">Lokasi Saya</button>
+                <small>*) Klik untuk mendapatkan lokasi anda saat ini</small>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-12">
+        <div class="card">
+            <div class="card-header">
+            <h4 class="card-title">Tambah Kelompok Tani</h4>
+            </div>
+            <div class="card-content">
+            <div class="card-body">
+                <form class="form form-vertical" action="{{route('kelompok.store')}}" method="post" enctype="multipart/form-data">
+                @csrf
                 <div class="form-body">
+                    <input id="latitude" type="hidden" name="latitude" />
+                    <input id="longitude" type="hidden" name="longitude" />
                     <div class="row">
                     <div class="col-12">
                         <div class="form-group">
-                        <label for="first-name-vertical">First Name</label>
-                        <input type="text" id="first-name-vertical" class="form-control" name="fname"
-                            placeholder="First Name">
+                        <label for="nama-vertical">Nama Kelompok</label>
+                        <input type="text" id="nama-vertical" class="form-control" name="nama"
+                            placeholder="Nama Kelompok">
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
-                        <label for="email-id-vertical">Email</label>
-                        <input type="email" id="email-id-vertical" class="form-control" name="email-id"
-                            placeholder="Email">
+                        <label for="ketua-vertical">Nama Ketua</label>
+                        <input type="text" id="ketua-vertical" class="form-control" name="ketua"
+                            placeholder="Nama Ketua">
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
-                        <label for="contact-info-vertical">Mobile</label>
-                        <input type="number" id="contact-info-vertical" class="form-control" name="contact"
-                            placeholder="Mobile">
+                        <label for="kontak-vertical">Kontak</label>
+                        <input type="text" id="kontak-vertical" class="form-control" name="kontak"
+                            placeholder="Kontak">
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
-                        <label for="password-vertical">Password</label>
-                        <input type="password" id="password-vertical" class="form-control" name="contact"
-                            placeholder="Password">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class='form-check'>
-                            <div class="checkbox">
-                                <input type="checkbox" id="checkbox3" class='form-check-input' checked>
-                                <label for="checkbox3">Remember Me</label>
+                            <span class="label">Foto ketua</span>
+                            <div class="form-file">
+                                <input type="file" class="form-file-input" name="foto_ketua" id="foto_ketua">
+                                <label class="form-file-label" for="foto_ketua">
+                                    <span class="form-file-text">Pilih Foto...</span>
+                                    <span class="form-file-button">Browse</span>
+                                </label>
                             </div>
+                            {{-- <label for="foto_ketua">Foto Ketua</label>
+                            <input type="file" class="form-file-input" id="foto_ketua">
+                            <label class="form-file-label" for="foto_ketua">
+                                <span class="form-file-text">Pilih Foto...</span>
+                                <span class="form-file-button">Browse</span>
+                            </label> --}}
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="provinsi-select">Provinsi</label>
+                            <select class="form-select" id="provinsi-select">
+                                <option value="">-- Pilih Disini --</option>
+                                @foreach($provinsi as $p)
+                                <option value="{{$p->id}}">{{$p->nama}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="kabupaten-select">Kabupaten</label>
+                            <select class="form-select" id="kabupaten-select">
+                                <option value="">-- Pilih Disini --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="kecamatan-select">Kecamatan</label>
+                            <select class="form-select" id="kecamatan-select">
+                                <option value="">-- Pilih Disini --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="desa-select">Desa</label>
+                            <select class="form-select" id="desa-select" name="id_desa">
+                                <option value="">-- Pilih Disini --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="alamat" class="form-label">Alamat Detail</label>
+                            <textarea class="form-control" name="alamat" id="alamat" rows="3"></textarea>
                         </div>
                     </div>
                     <div class="col-12 d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary mr-1 mb-1">Submit</button>
-                        <button type="reset" class="btn btn-light-secondary mr-1 mb-1">Reset</button>
+                        {{-- <button type="reset" class="btn btn-light-secondary mr-1 mb-1">Reset</button> --}}
                     </div>
                     </div>
                 </div>
@@ -64,5 +137,157 @@
 </section>
 @endsection
 @push('script')
+<script type="text/javascript">
+    $('#provinsi-select').change(function() {
+        var valueProv = $('#provinsi-select').val();
+        console.log('Provinsi Id : '+valueProv);
+        getKabupaten(valueProv);
+    });
 
+    $('#kabupaten-select').change(function() {
+        var valueKab = $('#kabupaten-select').val();
+        console.log('Kabupaten Id : '+valueKab);
+        getKecamatan(valueKab);
+    });
+
+    $('#kecamatan-select').change(function() {
+        var valueKec = $('#kecamatan-select').val();
+        console.log('Kecamatan Id : '+valueKec);
+        getDesa(valueKec);
+    });
+
+    $('#desa-select').change(function() {
+        var valueDesa = $('#desa-select').val();
+        console.log('Desa Id : '+valueDesa);
+    });
+
+    function getKabupaten(id) {
+        $.ajax({
+          url: '/api/v1/getKabupaten/'+id,
+          type: 'GET',
+          cache: false,
+          dataType: 'json',
+          success: function(json) {
+            // alert(json.data);
+            // console.log(json.data);
+              $("#kabupaten-select").html('');
+              if (json.code == 200) {
+                  for (i = 0; i < Object.keys(json.data).length; i++) {
+                      // console.log(json.data[i].nama);
+                      $('#kabupaten-select').append($('<option>').text(json.data[i].nama).attr('value', json.data[i].id));
+                  }
+
+              } else {
+                  $('#kabupaten-select').append($('<option>').text('Data tidak di temukan').attr('value', 'Data tidak di temukan'));
+              }
+          }
+        });
+    }
+
+    function getKecamatan(id) {
+        $.ajax({
+          url: '/api/v1/getKecamatan/'+id,
+          type: 'GET',
+          cache: false,
+          dataType: 'json',
+          success: function(json) {
+            // alert(json.data);
+            // console.log(json.data);
+              $("#kecamatan-select").html('');
+              if (json.code == 200) {
+                  for (i = 0; i < Object.keys(json.data).length; i++) {
+                      // console.log(json.data[i].nama);
+                      $('#kecamatan-select').append($('<option>').text(json.data[i].nama).attr('value', json.data[i].id));
+                  }
+
+              } else {
+                  $('#kecamatan-select').append($('<option>').text('Data tidak di temukan').attr('value', 'Data tidak di temukan'));
+              }
+          }
+        });
+    }
+
+    function getDesa(id) {
+        $.ajax({
+          url: '/api/v1/getDesa/'+id,
+          type: 'GET',
+          cache: false,
+          dataType: 'json',
+          success: function(json) {
+            // alert(json.data);
+            // console.log(json.data);
+              $("#desa-select").html('');
+              if (json.code == 200) {
+                  for (i = 0; i < Object.keys(json.data).length; i++) {
+                      // console.log(json.data[i].nama);
+                      $('#desa-select').append($('<option>').text(json.data[i].nama).attr('value', json.data[i].id));
+                  }
+
+              } else {
+                  $('#desa-select').append($('<option>').text('Data tidak di temukan').attr('value', 'Data tidak di temukan'));
+              }
+          }
+        });
+    }
+
+    var mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+    var satelite   = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1}),
+        streets  = L.tileLayer(mbUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1});
+
+
+    var baseLayers = {
+        "Satelite": satelite,
+        "Streets": streets
+    };
+
+
+
+    var map = new L.Map('map', {
+      'center': [-1.605328, 117.451067],
+      'zoom': 5,
+      'layers': [streets]
+    });
+
+    var marker = L.marker([-1.605328, 117.451067],{
+      draggable: true
+    }).addTo(map);
+    L.control.layers(baseLayers).addTo(map);
+
+    marker.on('dragend', function (e) {
+      document.getElementById('latitude').value = marker.getLatLng().lat;
+      document.getElementById('longitude').value = marker.getLatLng().lng;
+    });
+
+
+    function getLocation(){
+     
+    // get users lat/long
+    
+    var getPosition = {
+      enableHighAccuracy: false,
+      timeout: 9000,
+      maximumAge: 0
+    };
+    
+    function success(gotPosition) {
+      var uLat = gotPosition.coords.latitude;
+      var uLon = gotPosition.coords.longitude;
+      document.getElementById('latitude').value = uLat;
+      document.getElementById('longitude').value = uLon;
+      map.setView(new L.LatLng(uLat, uLon), 10);
+      map.removeLayer(marker);
+      marker = L.marker([uLat, uLon],{
+          draggable: true
+        }).addTo(map);
+      // console.log(`${uLat}`, `${uLon}`);
+    
+    };
+    
+    function error(err) {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+    };
+    
+    navigator.geolocation.getCurrentPosition(success, error, getPosition);
+    };
+</script>
 @endpush

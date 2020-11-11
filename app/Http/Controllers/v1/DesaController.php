@@ -4,6 +4,7 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Desa;
 
 class DesaController extends Controller
 {
@@ -15,6 +16,15 @@ class DesaController extends Controller
     public function index()
     {
         //
+    }
+
+    public function getDesa($id)
+    {
+        $data = Desa::where('kecamatan_id',$id)->get();
+        return response()->json([
+            'code' => 200,
+            'data' => $data,
+        ]);
     }
 
     /**

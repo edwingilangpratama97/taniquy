@@ -5,6 +5,7 @@ namespace App\Http\Controllers\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\KelompokTani;
+use App\Models\Provinsi;
 use Illuminate\Support\Facades\Validator;
 use DataTables;
 
@@ -23,8 +24,7 @@ class KelompokTaniController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($data){
-                    // return '<span><a href="/v1/kelompok/'.$data->id.'/edit" data-toggle="tooltip" class="text-dark" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>&nbsp;<a data-toggle="tooltip" data-placement="top" onclick="sweet('.$data->id.')" title="Delete" style="cursor: pointer; margin-left: 2px;"><i class="fas fa-trash color-danger"></i></a></span>';
-                    return '<a href="/v1/kelompok/'.$data->id.'" class="text-warning"><i class="fa fa-eye"></i></a>&nbsp;<a href="/v1/kelompok/'.$data->id.'/edit" class="text-primary"><i class="fa fa-edit"></i></a>&nbsp;<a href="#" class="text-danger" onclick="sweet('.$data->id.')"><i class="fa fa-trash"></i></a>';
+                    return '<a href="#" class="text-warning" onclick="detail('.$data->id.')"><i class="fa fa-eye"></i></a>&nbsp;<a href="/v1/kelompok/'.$data->id.'/edit" class="text-primary"><i class="fa fa-edit"></i></a>&nbsp;<a href="#" class="text-danger" onclick="sweet('.$data->id.')"><i class="fa fa-trash"></i></a>';
                 })
                 ->make(true);
         }
@@ -39,8 +39,9 @@ class KelompokTaniController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        return view('app.kelompok.create');
+    {  
+        $provinsi = Provinsi::all();
+        return view('app.kelompok.create', compact('provinsi'));
     }
 
     /**
@@ -51,7 +52,46 @@ class KelompokTaniController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $v = Validator::make($request->all(),[
+            'id_desa' => 'required',
+            'nama' => 'required|string|max:100',
+            'ketua' => 'required|string|max:100',
+            'kontak' => 'required|numeric',
+            'alamat' => 'required|string|max:255',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'foto_ketua' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
+        if ($v->fails()) {
+            dd($v->errors($v)->all());
+            return back()->withErrors($v)->withInput();
+        } else {
+            // dd($request->all());
+            $retailer = KelompokTani::count();
+            $date = date("Ymd");
+            $kode = sprintf("KT".$date."%'.04d\n", $retailer+1);
+
+            if ($request->file()) {
+                $name = $request->file('foto_ketua');
+                $foto_ketua = time()."_".$name->getClientOriginalName();
+                $request->foto_ketua->move(public_path("upload/foto/kelompok"), $foto_ketua);
+                $create = KelompokTani::create(array_merge($request->only('id_desa','nama','ketua','kontak','alamat','latitude','longitude'),[
+                    'foto_ketua' => 'upload/foto/retailer/'.$foto_ketua,
+                    'kode_kelompok' => $kode
+                ]));
+            } else {
+                $create = KelompokTani::create(array_merge($request->only('id_desa','nama','ketua','kontak','alamat','latitude','longitude'),[
+                    'kode_kelompok' => $kode
+                ]));
+            }
+
+            if ($create = true) {
+                return redirect('v1/kelompok')->with('success',  __('Create Data Berhasil.'));
+            } else {
+                return redirect('v1/kelompok')->with('failed',  __('Create Data Gagal.'));
+            }
+        }
     }
 
     /**
@@ -63,7 +103,6 @@ class KelompokTaniController extends Controller
     public function show($id)
     {
         $data = KelompokTani::where('id',$id)->first();
-        return view('app.kelompok.detail');
     }
 
     /**
@@ -74,8 +113,8 @@ class KelompokTaniController extends Controller
      */
     public function edit($id)
     {
-        $data = KelompokTani::where('id',$id)->first();
-        return view('app.kelompok.edit');
+        $data = KelompokTani::find($id);
+        return view('app.kelompok.edit', compact($data));
     }
 
     /**
@@ -87,7 +126,43 @@ class KelompokTaniController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $v = Validator::make($request->all(),[
+            'id_desa' => 'required',
+            'nama' => 'required|string|max:100',
+            'ketua' => 'required|string|max:100',
+            'kontak' => 'required|numeric|max:12|',
+            'alamat' => 'required|string|max:255',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'foto_ketua' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
+        if ($v->fails()) {
+            return back()->withErrors($v)->withInput();
+        } else {
+            $data = KelompokTani::find($id);
+
+            if ($request->file != '') {
+                $path = public_path().'/upload/foto/retailer';
+                if ($data->file != ''  && $data->file != null) {
+                    $file_old = $path.$data->file;
+                    unlink($file_old);
+                }
+                $file = $request->file;
+                $filename = $file->getClientOriginalName();
+                $file->move($path,$filename);
+
+                $data->update(array_merge($request->only('id_desa','nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
+                    'foto' => $filename
+                ]));
+
+            }
+            if ($data = true) {
+                return redirect('v1/kelompok')->with('success',  __('Update Data Berhasil.'));
+            } else {
+                return redirect('v1/kelompok')->with('failed',  __('Update Data Gagal.'));
+            }
+        }
     }
 
     /**
@@ -98,7 +173,12 @@ class KelompokTaniController extends Controller
      */
     public function destroy($id)
     {
-        $data = KelompokTani::where('id',$id)->first();
-        $data->delete();  
+        $delete = KelompokTani::find($id)->delete();
+
+        if ($delete = true) {
+            return redirect('v1/kelompok')->with('success',  __('Delete Data Berhasil.'));
+        } else {
+            return redirect('v1/kelompok')->with('failed',  __('Delete Data Gagal.'));
+        }
     }
 }

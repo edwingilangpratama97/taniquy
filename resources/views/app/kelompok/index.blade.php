@@ -48,7 +48,7 @@
 		            </a>
 		    	</div>
 		    </div>
-            <table class='table table-striped' id="data_table">
+            <table class='table table-stripped' id="data_table">
                 <thead>
                     <tr>
                     	<th>No</th>
