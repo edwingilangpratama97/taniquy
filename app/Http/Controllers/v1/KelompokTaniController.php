@@ -53,7 +53,10 @@ class KelompokTaniController extends Controller
     public function store(Request $request)
     {
         $v = Validator::make($request->all(),[
-            'id_desa' => 'required',
+            'desa' => 'required',
+            'kecamatan' => 'required',
+            'kabupaten' => 'required',
+            'provinsi' => 'required',
             'nama' => 'required|string|max:100',
             'ketua' => 'required|string|max:100',
             'kontak' => 'required|numeric',
@@ -64,7 +67,7 @@ class KelompokTaniController extends Controller
         ]);
 
         if ($v->fails()) {
-            dd($v->errors($v)->all());
+            // dd($v->errors($v)->all());
             return back()->withErrors($v)->withInput();
         } else {
             // dd($request->all());
@@ -72,17 +75,19 @@ class KelompokTaniController extends Controller
             $date = date("Ymd");
             $kode = sprintf("KT".$date."%'.04d\n", $kelompok+1);
 
-            if ($request->file()) {
+            if ($request->file('foto_ketua')()) {
                 $name = $request->file('foto_ketua');
                 $foto_ketua = time()."_".$name->getClientOriginalName();
                 $request->foto_ketua->move(public_path("upload/foto/kelompok"), $foto_ketua);
-                $create = KelompokTani::create(array_merge($request->only('id_desa','nama','ketua','kontak','alamat','latitude','longitude'),[
+                $create = KelompokTani::create(array_merge($request->only('nama','ketua','kontak','alamat','latitude','longitude'),[
                     'foto_ketua' => 'upload/foto/kelompok/'.$foto_ketua,
-                    'kode_kelompok' => $kode
+                    'kode_kelompok' => $kode,
+                    'id_desa' => $request->desa
                 ]));
             } else {
-                $create = KelompokTani::create(array_merge($request->only('id_desa','nama','ketua','kontak','alamat','latitude','longitude'),[
-                    'kode_kelompok' => $kode
+                $create = KelompokTani::create(array_merge($request->only('nama','ketua','kontak','alamat','latitude','longitude'),[
+                    'kode_kelompok' => $kode,
+                    'id_desa' => $request->desa
                 ]));
             }
 
@@ -117,8 +122,9 @@ class KelompokTaniController extends Controller
      */
     public function edit($id)
     {
+        $provinsi = Provinsi::all();
         $data = KelompokTani::find($id);
-        return view('app.kelompok.edit', compact($data));
+        return view('app.kelompok.edit', compact('data','provinsi'));
     }
 
     /**
@@ -131,10 +137,13 @@ class KelompokTaniController extends Controller
     public function update(Request $request, $id)
     {
         $v = Validator::make($request->all(),[
-            'id_desa' => 'required',
+            'desa' => 'nullable',
+            'kecamatan' => 'nullable',
+            'kabupaten' => 'nullable',
+            'provinsi' => 'nullable',
             'nama' => 'required|string|max:100',
             'ketua' => 'required|string|max:100',
-            'kontak' => 'required|numeric|max:12|',
+            'kontak' => 'required|numeric',
             'alamat' => 'required|string|max:255',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
@@ -146,20 +155,30 @@ class KelompokTaniController extends Controller
         } else {
             $data = KelompokTani::find($id);
 
-            if ($request->file != '') {
-                $path = public_path().'/upload/foto/kelompok';
-                if ($data->file != ''  && $data->file != null) {
-                    $file_old = $path.$data->file;
-                    unlink($file_old);
+            if ($request->file('foto_ketua') != '') {
+                $name = $request->file('foto_ketua');
+                $foto_ketua = time()."_".$name->getClientOriginalName();
+                $request->foto_ketua->move(public_path("upload/foto/kelompok"), $foto_ketua);
+                if ($request->desa == null) {
+                    $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
+                        'foto_ketua' => 'upload/foto/kelompok/'.$foto_ketua
+                    ]));
+                } else {
+                    $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
+                        'foto_ketua' => 'upload/foto/kelompok/'.$foto_ketua,
+                        'id_desa' => $request->desa
+                    ]));
                 }
-                $file = $request->file;
-                $filename = $file->getClientOriginalName();
-                $file->move($path,$filename);
 
-                $data->update(array_merge($request->only('id_desa','nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
-                    'foto' => $filename
-                ]));
-
+            } else {
+                if ($request->desa == null) {
+                    $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude')));
+                } else {
+                    // dd($request->all());
+                    $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
+                        'id_desa' => $request->desa
+                    ]));
+                }
             }
             if ($data = true) {
                 return redirect('v1/kelompok')->with('success',  __('Update Data Berhasil.'));

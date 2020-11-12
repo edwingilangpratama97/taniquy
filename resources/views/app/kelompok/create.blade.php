@@ -4,7 +4,7 @@
 <style type="text/css">
     #map {
         width: 100%;
-        height: 400px;
+        height: 310px;
     }
     .form-group .label {
         font-size: 0.755rem;
@@ -39,7 +39,33 @@
             <div class="card-content">
             <div class="card-body">
                 <div id="map"></div>
-                <button class="btn btn-primary btn-block mt-4" onclick="getLocation()">Lokasi Saya</button>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                        <label for="latitude-view">Latitude</label>
+                        <input type="text" id="latitude-view" class="form-control @error('latitude') is-invalid @enderror" readonly>
+                        @error('latitude')
+                        <div class="invalid-feedback">
+                            <i class="bx bx-radio-circle"></i>
+                            {{{$message}}}
+                        </div>
+                        @enderror
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                        <label for="longitude-view">Longitude</label>
+                        <input type="text" id="longitude-view" class="form-control @error('longitude') is-invalid @enderror" readonly>
+                        @error('longitude')
+                        <div class="invalid-feedback">
+                            <i class="bx bx-radio-circle"></i>
+                            {{{$message}}}
+                        </div>
+                        @enderror
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" onclick="getLocation()">Lokasi Saya</button>
                 <small>*) Klik untuk mendapatkan lokasi anda saat ini</small>
             </div>
             </div>
@@ -126,36 +152,60 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="provinsi-select">Provinsi</label>
-                                <select class="form-select" id="provinsi-select">
+                                <select class="form-select @error('provinsi') is-invalid @enderror" id="provinsi-select" name="provinsi">
                                     <option value="">-- Pilih Disini --</option>
                                     @foreach($provinsi as $p)
                                     <option value="{{$p->id}}">{{$p->nama}}</option>
                                     @endforeach
                                 </select>
+                                @error('provinsi')
+                                <div class="invalid-feedback">
+                                    <i class="bx bx-radio-circle"></i>
+                                    {{{$message}}}
+                                </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="kabupaten-select">Kabupaten</label>
-                                <select class="form-select" id="kabupaten-select">
+                                <select class="form-select @error('kabupaten') is-invalid @enderror" id="kabupaten-select" name="kabupaten">
                                     <option value="">-- Pilih Disini --</option>
                                 </select>
+                                @error('kabupaten')
+                                <div class="invalid-feedback">
+                                    <i class="bx bx-radio-circle"></i>
+                                    {{{$message}}}
+                                </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="kecamatan-select">Kecamatan</label>
-                                <select class="form-select" id="kecamatan-select">
+                                <select class="form-select @error('kecamatan') is-invalid @enderror" id="kecamatan-select" name="kecamatan">
                                     <option value="">-- Pilih Disini --</option>
                                 </select>
+                                @error('kecamatan')
+                                <div class="invalid-feedback">
+                                    <i class="bx bx-radio-circle"></i>
+                                    {{{$message}}}
+                                </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="desa-select">Desa</label>
-                                <select class="form-select" id="desa-select" name="id_desa">
+                                <select class="form-select @error('desa') is-invalid @enderror" id="desa-select" name="desa">
                                     <option value="">-- Pilih Disini --</option>
                                 </select>
+                                @error('desa')
+                                <div class="invalid-feedback">
+                                    <i class="bx bx-radio-circle"></i>
+                                    {{{$message}}}
+                                </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-12">
@@ -305,6 +355,8 @@
     marker.on('dragend', function (e) {
       document.getElementById('latitude').value = marker.getLatLng().lat;
       document.getElementById('longitude').value = marker.getLatLng().lng;
+      document.getElementById('latitude-view').value = marker.getLatLng().lat;
+      document.getElementById('longitude-view').value = marker.getLatLng().lng;
     });
 
 
@@ -321,13 +373,22 @@
     function success(gotPosition) {
       var uLat = gotPosition.coords.latitude;
       var uLon = gotPosition.coords.longitude;
+      // console.log(uLat,uLon);
       document.getElementById('latitude').value = uLat;
       document.getElementById('longitude').value = uLon;
+      document.getElementById('latitude-view').value = uLat;
+      document.getElementById('longitude-view').value = uLon;
       map.setView(new L.LatLng(uLat, uLon), 10);
       map.removeLayer(marker);
       marker = L.marker([uLat, uLon],{
           draggable: true
         }).addTo(map);
+      marker.on('dragend', function (e) {
+        document.getElementById('latitude').value = marker.getLatLng().lat;
+        document.getElementById('longitude').value = marker.getLatLng().lng;
+        document.getElementById('latitude-view').value = marker.getLatLng().lat;
+        document.getElementById('longitude-view').value = marker.getLatLng().lng;
+      });
       // console.log(`${uLat}`, `${uLon}`);
 
     };
