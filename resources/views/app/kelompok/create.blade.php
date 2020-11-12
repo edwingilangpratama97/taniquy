@@ -170,10 +170,10 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-12 d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary mr-1 mb-1">Submit</button>
-                            {{-- <button type="reset" class="btn btn-light-secondary mr-1 mb-1">Reset</button> --}}
-                        </div>
+                    </div>
+                    <div class="col-12 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary mr-1 mb-1"><i class="mdi mdi-check"></i> Save</button>
+                        {{-- <button type="reset" class="btn btn-light-secondary mr-1 mb-1">Reset</button> --}}
                     </div>
                     </div>
                 </div>
@@ -309,15 +309,15 @@
 
 
     function getLocation(){
-     
+
     // get users lat/long
-    
+
     var getPosition = {
       enableHighAccuracy: false,
       timeout: 9000,
       maximumAge: 0
     };
-    
+
     function success(gotPosition) {
       var uLat = gotPosition.coords.latitude;
       var uLon = gotPosition.coords.longitude;
@@ -329,13 +329,13 @@
           draggable: true
         }).addTo(map);
       // console.log(`${uLat}`, `${uLon}`);
-    
+
     };
-    
+
     function error(err) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
     };
-    
+
     navigator.geolocation.getCurrentPosition(success, error, getPosition);
     };
 </script>

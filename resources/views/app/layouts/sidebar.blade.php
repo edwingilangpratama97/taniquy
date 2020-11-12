@@ -19,6 +19,8 @@
                     {{ Request::is('v1/retailer*') ? 'active' : false }}
                     {{ Request::is('v1/customer*') ? 'active' : false }}
                     {{ Request::is('v1/mangga*') ? 'active' : false }}
+                    {{ Request::is('v1/jenisMangga*') ? 'active' : false }}
+                    {{ Request::is('v1/grade*') ? 'active' : false }}
                     ">
                     <a href="#" class='sidebar-link'>
                         <i data-feather="database" width="20"></i>
@@ -29,6 +31,8 @@
                     {{ Request::is('v1/retailer*') ? 'active' : false }}
                     {{ Request::is('v1/customer*') ? 'active' : false }}
                     {{ Request::is('v1/mangga*') ? 'active' : false }}
+                    {{ Request::is('v1/jenisMangga*') ? 'active' : false }}
+                    {{ Request::is('v1/grade*') ? 'active' : false }}
                     ">
 
                         <li>
@@ -48,11 +52,11 @@
                         </li>
 
                         <li>
-                            <a href="#">Jenis Mangga</a>
+                            <a href="{{route('jenisMangga.index')}}">Jenis Mangga</a>
                         </li>
 
                         <li>
-                            <a href="#">Grade</a>
+                            <a href="{{route('grade.index')}}">Grade</a>
                         </li>
                     </ul>
                 </li>
