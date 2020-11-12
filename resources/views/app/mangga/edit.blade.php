@@ -23,24 +23,46 @@
 		    @endif
         <div class="card">
             <div class="card-header">
-            <h4 class="card-title">Create Data</h4>
+            <div class="row">
+                <div class="col-6">
+                    <div class="float-left">
+                        <h4 class="card-title">Update Data</h4>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="float-right">
+                        <a href="{{route('mangga.index')}}" class="btn btn-primary"><i class="mdi mdi-arrow-left"></i> Back</a>
+                    </div>
+                </div>
+            </div>
             </div>
             <div class="card-content">
             <div class="card-body">
-                <form class="form form-vertical" action="{{route('mangga.store')}}" method="POST" enctype="multipart/form-data">
+                <form class="form form-vertical" action="{{route('mangga.update',$data->id)}}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
                 <div class="form-body">
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
                             <label for="first-name-vertical">Harga</label>
-                            <input type="number" min="0" id="first-name-vertical" class="form-control" name="harga" placeholder="Harga">
+                            <input type="number" min="0" id="first-name-vertical" class="form-control @error('harga') is-invalid @enderror" name="harga" placeholder="Harga" value="{{ $data->harga }}">
+                            @error('harga')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-group">
                             <label for="first-name-vertical">Stok</label>
-                            <input type="number" min="0" id="first-name-vertical" class="form-control" name="stok" placeholder="Stok">
+                            <input type="number" min="0" id="first-name-vertical" class="form-control @error('stok') is-invalid @enderror" name="stok" placeholder="Stok" value="{{ $data->stok }}">
+                            @error('stok')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                             </div>
                         </div>
                         <div class="col-12">
@@ -48,7 +70,7 @@
                             <label for="first-name-vertical">Jenis</label>
                             <select name="id_jenis" id="" class="form-control">
                                 @foreach ($jenis as $item)
-                                    <option value="{{$item->id}}">{{$item->nama}}</option>
+                                    <option value="{{$item->id}}"@if($item->id == $data->id_jenis) selected @endif>{{$item->nama}}</option>
                                 @endforeach
                             </select>
                             </div>
@@ -58,19 +80,59 @@
                             <label for="first-name-vertical">Jenis</label>
                             <select name="id_grade" id="" class="form-control">
                                 @foreach ($grade as $item)
-                                    <option value="{{$item->id}}">{{$item->nama}}</option>
+                                    <option value="{{$item->id}}"@if($item->id == $data->id_grade) selected @endif>{{$item->nama}}</option>
                                 @endforeach
                             </select>
                             </div>
                         </div>
+                       {{-- @if (Auth::user()->role == "admin")
+                       <div class="col-12">
+                            <div class="form-group">
+                            <label for="first-name-vertical">User</label>
+                            <select name="" id="user" class="form-control">
+                                <option value="">-- Pilih Role --</option>
+                                <option value="0">Kelompok Tani</option>
+                                <option value="1">Retailer</option>
+                            </select>
+                            <span>*jika ingin update pilih role ulang, jika tidak abaikan saja </span>
+                            </div>
+                        </div>
+                        <div class="col-12" id="show-kelompok">
+                            <div class="form-group">
+                            <label for="first-name-vertical">Kelompok Tani</label>
+                            <select name="id_kelompok" id="" class="form-control">
+                                    <option value="">-- Pilih kelompok Tani --</option>
+                                @foreach ($kelompok as $item)
+                                    <option value="{{$item->id}}" @if($item->id == $data->id_kelompok) selected @endif>{{$item->nama}}</option>
+                                @endforeach
+                            </select>
+                            </div>
+                        </div>
+                        <div class="col-12" id="show-retailer">
+                            <div class="form-group">
+                            <label for="first-name-vertical">Retailer</label>
+                            <select name="id_retailer" id="" class="form-control">
+                                <option value="">-- Pilih retailer --</option>
+                                @foreach ($retailer as $item)
+                                    <option value="{{$item->id}}" @if($item->id == $data->id_retailer) selected @endif>{{$item->nama}}</option>
+                                @endforeach
+                            </select>
+                            </div>
+                        </div>
+                       @endif --}}
                         <div class="col-12">
                                 <div class="form-group">
                                 <label for="first-name-vertical">Foto</label>
-                                <input type="file" id="first-name-vertical" class="form-control" name="foto" placeholder="Foto">
+                                <input type="file" id="first-name-vertical" class="form-control @error('foto') is-invalid @enderror" name="foto" placeholder="Foto">
+                                @error('foto')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                                 </div>
                             </div>
                         <div class="col-12 d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary mr-1 mb-1">Save</button>
+                            <button type="submit" class="btn btn-primary mr-1 mb-1"><i class="mdi mdi-check"></i> Save</button>
                         </div>
                     </div>
                 </div>
@@ -83,5 +145,23 @@
 </section>
 @endsection
 @push('script')
-
+    <script>
+        $('#show-kelompok').hide();
+        $('#show-retailer').hide();
+        $('#user').change(function(event){
+            var id = $(event.target).val();
+            if (id == "") {
+                $('#show-kelompok').hide();
+                $('#show-retailer').hide();
+            }
+            if (id == "0") {
+                $('#show-kelompok').show();
+                $('#show-retailer').hide();
+            }
+            if (id == "1") {
+                $('#show-kelompok').hide();
+                $('#show-retailer').show();
+            }
+        })
+    </script>
 @endpush

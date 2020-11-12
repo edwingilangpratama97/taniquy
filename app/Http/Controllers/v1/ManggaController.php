@@ -141,6 +141,8 @@ class ManggaController extends Controller
         $kelompok = KelompokTani::all();
         $retailer = Retailer::all();
         $data = Mangga::find($id);
+        // $kel = Mangga::where('id_kelompok',$id)->exists();
+        // $ret = Mangga::where('id_retailer',$id)->exists();
 
         return view('app.mangga.edit',compact('jenis','grade','kelompok','retailer','data'));
     }
@@ -173,41 +175,65 @@ class ManggaController extends Controller
             $kodeKel = sprintf("MK".$date."%'.04d\n", $mangga+1);
             $kodeRet = sprintf("MR".$date."%'.04d\n", $mangga+1);
 
-            $name = $request->file('foto');
-            $foto = time()."_".$name->getClientOriginalName();
-            $request->foto->move(public_path("upload/foto/Mangga"), $foto);
-
             $user = Auth::user();
             $mangga = Mangga::find($id);
+            // dd($mangga->foto);
             if ($user->role == 'admin') {
-                if ($request->id_kelompok) {
-                    $mangga->update(array_merge($request->only('id_jenis','id_grade','harga','stok','role','id_retailer','id_kelompok'),[
+                if ($request->foto != '') {
+                    $name = $request->file('foto');
+                    $foto = time()."_".$name->getClientOriginalName();
+                    $request->foto->move(public_path("upload/foto/Mangga"), $foto);
+
+                    $mangga->update(array_merge($request->only('id_jenis','id_grade','harga','stok','role'),[
                         'foto' => 'upload/foto/Mangga/'.$foto,
-                        'kode_mangga' => $kodeKel
                     ]));
-                } elseif ($request->id_retailer) {
-                    $mangga->update(array_merge($request->only('id_jenis','id_grade','harga','stok','role','id_retailer','id_kelompok'),[
-                        'foto' => 'upload/foto/Mangga/'.$foto,
-                        'kode_mangga' => $kodeRet
-                    ]));
+                    return back()->with('success','Data Updated all with foto !');
+                } else {
+                    $mangga->update(array_merge($request->only('id_jenis','id_grade','harga','stok','role')));
+                    return back()->with('success','Data Updated all !');
                 }
-                return back()->with('success','Data Created all !');
             }elseif ($user->role == 'retailer') {
-                $mangga->update(array_merge($request->only('id_jenis','id_grade','harga','stok','role'),[
-                    'foto' => 'upload/foto/Mangga/'.$foto,
-                    'kode_mangga' => $kodeRet,
-                    'role' => 'retailer',
-                    'id_retailer' => $user->id_retailer
-                ]));
-                return back()->with('success','Data Created role & id_retail !');
+                if ($request->foto != '') {
+                    $name = $request->file('foto');
+                    $foto = time()."_".$name->getClientOriginalName();
+                    $request->foto->move(public_path("upload/foto/Mangga"), $foto);
+
+                    $mangga->update(array_merge($request->only('id_jenis','id_grade','harga','stok','role'),[
+                        'foto' => 'upload/foto/Mangga/'.$foto,
+                        'kode_mangga' => $kodeRet,
+                        'role' => 'retailer',
+                        'id_retailer' => $user->id_retailer
+                        ]));
+                        return back()->with('success','Data Created with Foto !');
+                }else {
+                    $mangga->update(array_merge($request->only('id_jenis','id_grade','harga','stok','role'),[
+                        'kode_mangga' => $kodeRet,
+                        'role' => 'retailer',
+                        'id_retailer' => $user->id_retailer
+                    ]));
+                    return back()->with('success','Data Created !');
+                }
             }elseif ($user->role == 'kelompok') {
-                $mangga->update(array_merge($request->only('id_jenis','id_grade','harga','stok','role'),[
-                    'foto' => 'upload/foto/Mangga/'.$foto,
-                    'kode_mangga' => $kodeKel,
-                    'role' => 'kelompok',
-                    'id_kelompok' => $user->id_kelompok
-                ]));
-                return back()->with('success','Data Created role kelompok & id_kelompok !');
+                if ($request->foto != '') {
+                    $name = $request->file('foto');
+                    $foto = time()."_".$name->getClientOriginalName();
+                    $request->foto->move(public_path("upload/foto/Mangga"), $foto);
+
+                    $mangga->update(array_merge($request->only('id_jenis','id_grade','harga','stok','role'),[
+                        'foto' => 'upload/foto/Mangga/'.$foto,
+                        'kode_mangga' => $kodeKel,
+                        'role' => 'kelompok',
+                        'id_kelompok' => $user->id_kelompok
+                    ]));
+                    return back()->with('success','Data Created with foto !');
+                } else {
+                    $mangga->update(array_merge($request->only('id_jenis','id_grade','harga','stok','role'),[
+                        'kode_mangga' => $kodeKel,
+                        'role' => 'kelompok',
+                        'id_kelompok' => $user->id_kelompok
+                    ]));
+                    return back()->with('success','Data Created !');
+                }
             }
         }
     }

@@ -88,10 +88,10 @@
                        <div class="col-12">
                             <div class="form-group">
                             <label for="first-name-vertical">User</label>
-                            <select name="" id="user" class="form-control">
+                            <select name="role" id="user" class="form-control">
                                 <option value="">-- Pilih Role --</option>
-                                <option value="0">Kelompok Tani</option>
-                                <option value="1">Retailer</option>
+                                <option value="kelompok">Kelompok Tani</option>
+                                <option value="retailer">Retailer</option>
                             </select>
                             </div>
                         </div>
@@ -152,11 +152,11 @@
                 $('#show-kelompok').hide();
                 $('#show-retailer').hide();
             }
-            if (id == "0") {
+            if (id == "kelompok") {
                 $('#show-kelompok').show();
                 $('#show-retailer').hide();
             }
-            if (id == "1") {
+            if (id == "retailer") {
                 $('#show-kelompok').hide();
                 $('#show-retailer').show();
             }
