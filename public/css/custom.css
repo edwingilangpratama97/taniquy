@@ -110,3 +110,6 @@ a:hover {
 .card.card-statistic .card-right p {
     color: #475F7B;
 }
+table.dataTable {
+    width: 100% !important;
+}

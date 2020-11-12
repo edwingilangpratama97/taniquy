@@ -39,27 +39,31 @@
 		    </div>
 		    @endif
 		    <div class="row mb-2">
-		    	<div class="col-6">
+		    	<div class="col-12 col-md-10">
 		    		
 		    	</div>
-		    	<div class="col-6">
-				    <a href="{{route('kelompok.create')}}" class="btn btn-success float-right">
+		    	<div class="col-12 col-md-2">
+				    <a href="{{route('kelompok.create')}}" class="btn btn-success btn-block">
 		            	<i data-feather="plus-circle"></i>Tambah
 		            </a>
 		    	</div>
 		    </div>
-            <table class='table table-stripped' id="data_table">
-                <thead>
-                    <tr>
-                    	<th>No</th>
-                        <th>Nama Kelompok</th>
-                        <th>Ketua</th>
-                        <th>Kontak</th>
-                        <th>Desa</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-            </table>
+            <div class="row">
+                <div class="col-12">
+                    <table class='table table-stripped' id="data_table">
+                        <thead>
+                            <tr>
+                            	<th>No</th>
+                                <th>Nama Kelompok</th>
+                                <th>Ketua</th>
+                                <th>Kontak</th>
+                                <th>Desa</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
