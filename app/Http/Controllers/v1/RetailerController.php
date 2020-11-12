@@ -4,6 +4,7 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Desa;
+use App\Models\Provinsi;
 use App\Models\Retailer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -37,8 +38,8 @@ class RetailerController extends Controller
      */
     public function create()
     {
-        $desa = Desa::all();
-        return view('app.middleMan.create',compact('desa'));
+        $provinsi = Provinsi::all();
+        return view('app.middleMan.create',compact('provinsi'));
     }
 
     /**
@@ -67,15 +68,21 @@ class RetailerController extends Controller
             $date = date("Ymd");
             $kode = sprintf("RT".$date."%'.04d\n", $retailer+1);
 
-            $name = $request->file('foto');
-            $foto = time()."_".$name->getClientOriginalName();
-            $request->foto->move(public_path("upload/foto/retailer"), $foto);
-            Retailer::create(array_merge($request->only('id_desa','nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
-                'foto' => 'upload/foto/retailer/'.$foto,
-                'kode_retailer' => $kode
-            ]));
-
-            return back()->with('success',  __('Successfully created data.'));
+            if ($request->file()) {
+                $name = $request->file('foto');
+                $foto = time()."_".$name->getClientOriginalName();
+                $request->foto->move(public_path("upload/foto/Retailer"), $foto);
+                Retailer::create(array_merge($request->only('id_desa','nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
+                    'foto' => 'upload/foto/retailer/'.$foto,
+                    'kode_retailer' => $kode
+                ]));
+            } else {
+                Retailer::create(array_merge($request->only('id_desa','nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
+                    'foto' => 'upload/foto/retailer/'.$foto,
+                    'kode_retailer' => $kode
+                ]));
+            }
+            return redirect('v1/retailer')->with('success',  __('Create Data Berhasil.'));
         }
     }
 
