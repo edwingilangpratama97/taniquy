@@ -51,10 +51,13 @@ class RetailerController extends Controller
     public function store(Request $request)
     {
         $v = Validator::make($request->all(),[
-            'id_desa' => 'required',
+            'desa' => 'required',
+            'kecamatan' => 'required',
+            'kabupaten' => 'required',
+            'provinsi' => 'required',
             'nama' => 'required|string|max:100',
             'jenis_usaha' => 'required|in:PT,CV,Perorangan',
-            'kontak' => 'required|numeric|max:12|',
+            'kontak' => 'required|numeric',
             'alamat' => 'required|string|max:255',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
@@ -62,6 +65,7 @@ class RetailerController extends Controller
         ]);
 
         if ($v->fails()) {
+            dd($v->errors()->all());
             return back()->withErrors($v)->withInput();
         } else {
             $retailer = Retailer::count();
@@ -72,14 +76,15 @@ class RetailerController extends Controller
                 $name = $request->file('foto');
                 $foto = time()."_".$name->getClientOriginalName();
                 $request->foto->move(public_path("upload/foto/Retailer"), $foto);
-                Retailer::create(array_merge($request->only('id_desa','nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
+                Retailer::create(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
                     'foto' => 'upload/foto/retailer/'.$foto,
-                    'kode_retailer' => $kode
+                    'kode_retailer' => $kode,
+                    'id_desa' => $request->desa
                 ]));
             } else {
-                Retailer::create(array_merge($request->only('id_desa','nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
-                    'foto' => 'upload/foto/retailer/'.$foto,
-                    'kode_retailer' => $kode
+                Retailer::create(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
+                    'kode_retailer' => $kode,
+                    'id_desa' => $request->desa
                 ]));
             }
             return redirect('v1/retailer')->with('success',  __('Create Data Berhasil.'));
@@ -105,9 +110,9 @@ class RetailerController extends Controller
      */
     public function edit($id)
     {
-        $desa = Desa::all();
+        $provinsi = Provinsi::all();
         $data = Retailer::find($id);
-        return view('app.middleMan.edit',compact('desa','data'));
+        return view('app.middleMan.edit',compact('provinsi','data'));
     }
 
     /**
@@ -120,10 +125,13 @@ class RetailerController extends Controller
     public function update(Request $request, $id)
     {
         $v = Validator::make($request->all(),[
-            'id_desa' => 'required',
+            'desa' => 'nullable',
+            'kecamatan' => 'nullable',
+            'kabupaten' => 'nullable',
+            'provinsi' => 'nullable',
             'nama' => 'required|string|max:100',
             'jenis_usaha' => 'required|in:PT,CV,Perorangan',
-            'kontak' => 'required|numeric|max:12|',
+            'kontak' => 'required|numeric',
             'alamat' => 'required|string|max:255',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
@@ -135,22 +143,37 @@ class RetailerController extends Controller
         } else {
             $data = Retailer::find($id);
 
-            if ($request->file != '') {
-                $path = public_path().'/upload/foto/retailer';
-                if ($data->file != ''  && $data->file != null) {
-                    $file_old = $path.$data->file;
-                    unlink($file_old);
+            if ($request->file('foto') != '') {
+                $name = $request->file('foto');
+                $foto = time()."_".$name->getClientOriginalName();
+                $request->foto->move(public_path("upload/foto/retailer"), $foto);
+                if ($request->desa == null) {
+                    $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
+                        'foto' => 'upload/foto/retailer/'.$foto,
+                        'id_desa' => $request->desa
+                    ]));
+                } else {
+                    $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
+                        'foto' => 'upload/foto/retailer/'.$foto,
+                        'id_desa' => $request->desa
+                    ]));
                 }
-                $file = $request->file;
-                $filename = $file->getClientOriginalName();
-                $file->move($path,$filename);
 
-                $data->update(array_merge($request->only('id_desa','nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
-                    'foto' => $filename
-                ]));
-
+            } else {
+                if ($request->desa == null) {
+                    $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude')));
+                } else {
+                    // dd($request->all());
+                    $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
+                        'id_desa' => $request->desa
+                    ]));
+                }
             }
-            return back()->with('success',  __('Successfully updated data.'));
+            if ($data = true) {
+                return redirect('v1/retailer')->with('success',  __('Update Data Berhasil.'));
+            } else {
+                return redirect('v1/retailer')->with('failed',  __('Update Data Gagal.'));
+            }
         }
     }
 
