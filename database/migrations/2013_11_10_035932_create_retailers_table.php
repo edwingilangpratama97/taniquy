@@ -20,6 +20,7 @@ class CreateRetailersTable extends Migration
             $table->string('nama', 100);
             $table->enum('jenis_usaha', ['PT','CV','Perorangan']);
             $table->string('kontak', 20);
+            $table->string('foto')->nullable();
             $table->text('alamat');
             $table->string('latitude', 100);
             $table->string('longitude', 100);

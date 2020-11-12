@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaniQuy</title>
-    
+
     <link rel="stylesheet" href="{{asset('assets/css/bootstrap.css')}}">
-    
+
     <link rel="stylesheet" href="{{asset('assets/vendors/chartjs/Chart.min.css')}}">
 
     <link rel="stylesheet" href="{{asset('assets/vendors/perfect-scrollbar/perfect-scrollbar.css')}}">
@@ -20,6 +20,8 @@
     {{-- Font Awesome Icon --}}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@5.8.55/css/materialdesignicons.min.css">
+
 </head>
 <body>
     <div id="app">
@@ -88,7 +90,7 @@
                     </ul>
                 </div>
             </nav>
-            
+
             <div class="main-content container-fluid">
                 @yield('content');
             </div>
