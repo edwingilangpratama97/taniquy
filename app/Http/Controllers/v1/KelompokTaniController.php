@@ -75,7 +75,7 @@ class KelompokTaniController extends Controller
             $date = date("Ymd");
             $kode = sprintf("KT".$date."%'.04d\n", $kelompok+1);
 
-            if ($request->file('foto_ketua')()) {
+            if ($request->file('foto_ketua')) {
                 $name = $request->file('foto_ketua');
                 $foto_ketua = time()."_".$name->getClientOriginalName();
                 $request->foto_ketua->move(public_path("upload/foto/kelompok"), $foto_ketua);
