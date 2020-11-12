@@ -24,7 +24,7 @@ class RetailerController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($data){
-                    return '<span><a href="/v1/retailer/'.$data->id.'/edit" data-toggle="tooltip" class="text-dark" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>&nbsp;<a data-toggle="tooltip" data-placement="top" onclick="sweet('.$data->id.')" title="Delete" style="cursor: pointer; margin-left: 2px;"><i class="fas fa-trash color-danger"></i></a></span>';
+                    return '<span><a href="#" class="text-warning" data-toggle="modal" data-target="#warning" onclick="getRetailer('.$data->id.')"><i class="fa fa-eye"></i></a>&nbsp;<a href="/v1/retailer/'.$data->id.'/edit" data-toggle="tooltip" class="text-dark" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>&nbsp;<a data-toggle="tooltip" data-placement="top" onclick="sweet('.$data->id.')" title="Delete" style="cursor: pointer; margin-left: 2px;"><i class="fas fa-trash color-danger"></i></a></span>';
                 })
                 ->make(true);
         }
@@ -99,7 +99,11 @@ class RetailerController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Retailer::with('desa.kecamatan.kabupaten.provinsi')->where('id',$id)->first();
+        return response()->json([
+            'code' => 200,
+            'data' => $data
+        ]);
     }
 
     /**
