@@ -22,4 +22,5 @@ Route::group(['prefix'=>'v1','namespace'=>'v1'], function(){
 	Route::get('getKabupaten/{id}','KabupatenController@getKabupaten');
 	Route::get('getKecamatan/{id}','KecamatanController@getKecamatan');
 	Route::get('getDesa/{id}','DesaController@getDesa');
+	Route::get('getKelompok/{id}','KelompokTaniController@show');
 });

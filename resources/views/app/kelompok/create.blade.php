@@ -19,7 +19,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Data Master</a></li>
-                <li class="breadcrumb-item"><a href="{{route('kelompok.index')}}"></a>Kelompok Tani</li>
+                <li class="breadcrumb-item"><a href="{{route('kelompok.index')}}">Kelompok Tani</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Tambah</li>
             </ol>
         </nav>
@@ -60,120 +60,120 @@
                     <input id="latitude" type="hidden" name="latitude" />
                     <input id="longitude" type="hidden" name="longitude" />
                     <div class="row">
-                    <div class="col-12">
-                        <div class="form-group">
-                        <label for="nama-vertical">Nama Kelompok</label>
-                        <input type="text" id="nama-vertical" class="form-control @error('nama') is-invalid @enderror" name="nama"
-                            placeholder="Nama Kelompok">
+                        <div class="col-6">
+                            <div class="form-group">
+                            <label for="nama-vertical">Nama Kelompok</label>
+                            <input type="text" id="nama-vertical" class="form-control @error('nama') is-invalid @enderror" name="nama"
+                                placeholder="Nama Kelompok">
 
-                        @error('nama')
-                        <div class="invalid-feedback">
-                            <i class="bx bx-radio-circle"></i>
-                            {{{$message}}}
+                            @error('nama')
+                            <div class="invalid-feedback">
+                                <i class="bx bx-radio-circle"></i>
+                                {{{$message}}}
+                            </div>
+                            @enderror
+                            </div>
                         </div>
-                        @enderror
+                        <div class="col-6">
+                            <div class="form-group">
+                            <label for="ketua-vertical">Nama Ketua</label>
+                            <input type="text" id="ketua-vertical" class="form-control @error('ketua') is-invalid @enderror" name="ketua" placeholder="Nama Ketua">
+                            @error('ketua')
+                            <div class="invalid-feedback">
+                                <i class="bx bx-radio-circle"></i>
+                                {{{$message}}}
+                            </div>
+                            @enderror
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                        <label for="ketua-vertical">Nama Ketua</label>
-                        <input type="text" id="ketua-vertical" class="form-control @error('ketua') is-invalid @enderror" name="ketua" placeholder="Nama Ketua">
-                        @error('ketua')
-                        <div class="invalid-feedback">
-                            <i class="bx bx-radio-circle"></i>
-                            {{{$message}}}
+                        <div class="col-6">
+                            <div class="form-group">
+                            <label for="kontak-vertical">Kontak</label>
+                            <input type="text" id="kontak-vertical" class="form-control @error('kontak') is-invalid @enderror" name="kontak"
+                                placeholder="Kontak">
+                            @error('kontak')
+                            <div class="invalid-feedback">
+                                <i class="bx bx-radio-circle"></i>
+                                {{{$message}}}
+                            </div>
+                            @enderror
+                            </div>
                         </div>
-                        @enderror
-                        </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                        <label for="kontak-vertical">Kontak</label>
-                        <input type="text" id="kontak-vertical" class="form-control @error('kontak') is-invalid @enderror" name="kontak"
-                            placeholder="Kontak">
-                        @error('kontak')
-                        <div class="invalid-feedback">
-                            <i class="bx bx-radio-circle"></i>
-                            {{{$message}}}
-                        </div>
-                        @enderror
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <span class="label">Foto ketua</span>
-                            <div class="form-file">
-                                <input type="file" class="form-file-input @error('foto_ketua') is-invalid @enderror" name="foto_ketua" id="foto_ketua">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <span class="label">Foto ketua</span>
+                                <div class="form-file">
+                                    <input type="file" class="form-file-input @error('foto_ketua') is-invalid @enderror" name="foto_ketua" id="foto_ketua">
+                                    <label class="form-file-label" for="foto_ketua">
+                                        <span class="form-file-text">Pilih Foto...</span>
+                                        <span class="form-file-button">Browse</span>
+                                    </label>
+                                    @error('foto_ketua')
+                                    <div class="invalid-feedback">
+                                        <i class="bx bx-radio-circle"></i>
+                                        {{{$message}}}
+                                    </div>
+                                    @enderror
+                                </div>
+                                {{-- <label for="foto_ketua">Foto Ketua</label>
+                                <input type="file" class="form-file-input" id="foto_ketua">
                                 <label class="form-file-label" for="foto_ketua">
                                     <span class="form-file-text">Pilih Foto...</span>
                                     <span class="form-file-button">Browse</span>
-                                </label>
-                                @error('foto_ketua')
+                                </label> --}}
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="provinsi-select">Provinsi</label>
+                                <select class="form-select" id="provinsi-select">
+                                    <option value="">-- Pilih Disini --</option>
+                                    @foreach($provinsi as $p)
+                                    <option value="{{$p->id}}">{{$p->nama}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="kabupaten-select">Kabupaten</label>
+                                <select class="form-select" id="kabupaten-select">
+                                    <option value="">-- Pilih Disini --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="kecamatan-select">Kecamatan</label>
+                                <select class="form-select" id="kecamatan-select">
+                                    <option value="">-- Pilih Disini --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="desa-select">Desa</label>
+                                <select class="form-select" id="desa-select" name="id_desa">
+                                    <option value="">-- Pilih Disini --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="alamat" class="form-label">Alamat Detail</label>
+                                <textarea class="form-control @error('alamat') is-invalid @enderror" name="alamat" id="alamat" rows="3"></textarea>
+                                @error('alamat')
                                 <div class="invalid-feedback">
                                     <i class="bx bx-radio-circle"></i>
                                     {{{$message}}}
                                 </div>
                                 @enderror
                             </div>
-                            {{-- <label for="foto_ketua">Foto Ketua</label>
-                            <input type="file" class="form-file-input" id="foto_ketua">
-                            <label class="form-file-label" for="foto_ketua">
-                                <span class="form-file-text">Pilih Foto...</span>
-                                <span class="form-file-button">Browse</span>
-                            </label> --}}
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="provinsi-select">Provinsi</label>
-                            <select class="form-select" id="provinsi-select">
-                                <option value="">-- Pilih Disini --</option>
-                                @foreach($provinsi as $p)
-                                <option value="{{$p->id}}">{{$p->nama}}</option>
-                                @endforeach
-                            </select>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary mr-1 mb-1">Submit</button>
+                            {{-- <button type="reset" class="btn btn-light-secondary mr-1 mb-1">Reset</button> --}}
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="kabupaten-select">Kabupaten</label>
-                            <select class="form-select" id="kabupaten-select">
-                                <option value="">-- Pilih Disini --</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="kecamatan-select">Kecamatan</label>
-                            <select class="form-select" id="kecamatan-select">
-                                <option value="">-- Pilih Disini --</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="desa-select">Desa</label>
-                            <select class="form-select" id="desa-select" name="id_desa">
-                                <option value="">-- Pilih Disini --</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label for="alamat" class="form-label">Alamat Detail</label>
-                            <textarea class="form-control @error('alamat')" name="alamat" id="alamat" rows="3"></textarea>
-                            @error('alamat')
-                            <div class="invalid-feedback">
-                                <i class="bx bx-radio-circle"></i>
-                                {{{$message}}}
-                            </div>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="col-12 d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary mr-1 mb-1">Submit</button>
-                        {{-- <button type="reset" class="btn btn-light-secondary mr-1 mb-1">Reset</button> --}}
                     </div>
                     </div>
                 </div>

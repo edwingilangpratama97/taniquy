@@ -24,7 +24,7 @@ class KelompokTaniController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($data){
-                    return '<a href="#" class="text-warning" onclick="detail('.$data->id.')"><i class="fa fa-eye"></i></a>&nbsp;<a href="/v1/kelompok/'.$data->id.'/edit" class="text-primary"><i class="fa fa-edit"></i></a>&nbsp;<a href="#" class="text-danger" onclick="sweet('.$data->id.')"><i class="fa fa-trash"></i></a>';
+                    return '<a href="#" class="text-warning" data-toggle="modal" data-target="#warning" onclick="getKelompok('.$data->id.')"><i class="fa fa-eye"></i></a>&nbsp;<a href="/v1/kelompok/'.$data->id.'/edit" class="text-primary"><i class="fa fa-edit"></i></a>&nbsp;<a href="#" class="text-danger" onclick="sweet('.$data->id.')"><i class="fa fa-trash"></i></a>';
                 })
                 ->make(true);
         }
@@ -68,16 +68,16 @@ class KelompokTaniController extends Controller
             return back()->withErrors($v)->withInput();
         } else {
             // dd($request->all());
-            $retailer = KelompokTani::count();
+            $kelompok = KelompokTani::count();
             $date = date("Ymd");
-            $kode = sprintf("KT".$date."%'.04d\n", $retailer+1);
+            $kode = sprintf("KT".$date."%'.04d\n", $kelompok+1);
 
             if ($request->file()) {
                 $name = $request->file('foto_ketua');
                 $foto_ketua = time()."_".$name->getClientOriginalName();
                 $request->foto_ketua->move(public_path("upload/foto/kelompok"), $foto_ketua);
                 $create = KelompokTani::create(array_merge($request->only('id_desa','nama','ketua','kontak','alamat','latitude','longitude'),[
-                    'foto_ketua' => 'upload/foto/retailer/'.$foto_ketua,
+                    'foto_ketua' => 'upload/foto/kelompok/'.$foto_ketua,
                     'kode_kelompok' => $kode
                 ]));
             } else {
@@ -102,7 +102,11 @@ class KelompokTaniController extends Controller
      */
     public function show($id)
     {
-        $data = KelompokTani::where('id',$id)->first();
+        $data = KelompokTani::with('desa.kecamatan.kabupaten.provinsi')->where('id',$id)->first();
+        return response()->json([
+            'code' => 200,
+            'data' => $data
+        ]);
     }
 
     /**
@@ -143,7 +147,7 @@ class KelompokTaniController extends Controller
             $data = KelompokTani::find($id);
 
             if ($request->file != '') {
-                $path = public_path().'/upload/foto/retailer';
+                $path = public_path().'/upload/foto/kelompok';
                 if ($data->file != ''  && $data->file != null) {
                     $file_old = $path.$data->file;
                     unlink($file_old);
