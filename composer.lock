@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca84f02306be8e982decb8987c10975d",
+    "content-hash": "482f18ec1a41f0706cc59046c2a1a339",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -103,6 +103,49 @@
                 "math"
             ],
             "time": "2020-08-18T23:57:15+00:00"
+        },
+        {
+            "name": "caouecs/laravel-lang",
+            "version": "7.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/caouecs/lang.git",
+                "reference": "2cb9932f781415f1669ce27d29e5b86399ab164a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/caouecs/lang/zipball/2cb9932f781415f1669ce27d29e5b86399ab164a",
+                "reference": "2cb9932f781415f1669ce27d29e5b86399ab164a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*"
+            },
+            "suggest": {
+                "andrey-helldar/laravel-lang-publisher": "Easy installation and update of translation files for your project",
+                "arcanedev/laravel-lang": "Translations manager and checker for Laravel 5",
+                "overtrue/laravel-lang": "Command to add languages in your project"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "caouecs",
+                    "email": "caouecs@caouecs.net"
+                }
+            ],
+            "description": "Languages for Laravel",
+            "keywords": [
+                "lang",
+                "languages",
+                "laravel",
+                "lpm"
+            ],
+            "abandoned": "https://github.com/Laravel-Lang/lang",
+            "time": "2020-08-23T08:17:21+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -3983,20 +4026,6 @@
                 "jquery",
                 "laravel"
             ],
-            "support": {
-                "issues": "https://github.com/yajra/laravel-datatables/issues",
-                "source": "https://github.com/yajra/laravel-datatables/tree/v9.14.1"
-            },
-            "funding": [
-                {
-                    "url": "https://www.paypal.me/yajra",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://www.patreon.com/yajra",
-                    "type": "patreon"
-                }
-            ],
             "time": "2020-11-11T07:12:41+00:00"
         }
     ],
@@ -5937,6 +5966,5 @@
     "platform": {
         "php": "^7.2.5"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "platform-dev": []
 }

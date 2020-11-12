@@ -18,6 +18,7 @@ class CreateEndusersTable extends Migration
             $table->string('kode_enduser')->unique();
             $table->foreignId('id_desa')->nullable()->constrained('desas')->onDelete('set null');
             $table->string('nama', 100);
+            $table->string('foto')->nullable();
             $table->date('tgl_lahir');
             $table->enum('jenis_kelamin', ['L','P']);
             $table->string('kontak', 20);
