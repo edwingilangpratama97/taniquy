@@ -26,5 +26,7 @@ Route::group(['prefix'=>'v1','namespace'=>'v1','middleware'=>'auth'], function()
 	Route::resource('retailer','RetailerController');
 	Route::resource('customer','EndUserController');
 	Route::resource('mangga','ManggaController');
+	Route::resource('jenisMangga','JenisManggaController');
+	Route::resource('grade','GradeController');
 });
 

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Grade;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class GradeController extends Controller
 {
@@ -12,9 +15,20 @@ class GradeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if($request->ajax()){
+            $data = Grade::latest()->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($data){
+                    return '<a href="/v1/grade/'.$data->id.'/edit" class="text-primary"><i class="fa fa-edit"></i></a>';
+                })
+                ->make(true);
+        }
+        // dd($count);
+
+        return view('app.grade.index');
     }
 
     /**
@@ -57,7 +71,8 @@ class GradeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = Grade::find($id);
+        return view('app.grade.edit',compact('data'));
     }
 
     /**
@@ -69,7 +84,16 @@ class GradeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $v = Validator::make($request->all(),[
+            'nama' => 'required|string|max:100'
+        ]);
+        if ($v->fails()) {
+            return back()->withErrors($v)->withInput();
+        } else {
+            $grade = Grade::find($id);
+            $grade->update($request->all());
+        }
+        return redirect('v1/grade')->with('success',__('Update Data Berhasil.'));
     }
 
     /**

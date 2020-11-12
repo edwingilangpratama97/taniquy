@@ -39,7 +39,7 @@ class KelompokTaniController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {  
+    {
         $provinsi = Provinsi::all();
         return view('app.kelompok.create', compact('provinsi'));
     }

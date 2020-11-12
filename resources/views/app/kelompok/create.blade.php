@@ -171,26 +171,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="desa-select">Desa</label>
-                            <select class="form-select" id="desa-select" name="id_desa">
-                                <option value="">-- Pilih Disini --</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label for="alamat" class="form-label">Alamat Detail</label>
-                            <textarea class="form-control @error('alamat') is-invalid @enderror" name="alamat" id="alamat" rows="3"></textarea>
-                            @error('alamat')
-                            <div class="invalid-feedback">
-                                <i class="bx bx-radio-circle"></i>
-                                {{{$message}}}
-                            </div>
-                            @enderror
-                        </div>
-                    </div>
                     <div class="col-12 d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary mr-1 mb-1"><i class="mdi mdi-check"></i> Save</button>
                         {{-- <button type="reset" class="btn btn-light-secondary mr-1 mb-1">Reset</button> --}}
