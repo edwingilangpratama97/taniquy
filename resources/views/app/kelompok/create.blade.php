@@ -162,7 +162,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label for="alamat" class="form-label">Alamat Detail</label>
-                            <textarea class="form-control @error('alamat')" name="alamat" id="alamat" rows="3"></textarea>
+                            <textarea class="form-control @error('alamat') is-invalid @enderror" name="alamat" id="alamat" rows="3"></textarea>
                             @error('alamat')
                             <div class="invalid-feedback">
                                 <i class="bx bx-radio-circle"></i>
@@ -172,7 +172,7 @@
                         </div>
                     </div>
                     <div class="col-12 d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary mr-1 mb-1">Submit</button>
+                        <button type="submit" class="btn btn-primary mr-1 mb-1"><i class="mdi mdi-check"></i> Save</button>
                         {{-- <button type="reset" class="btn btn-light-secondary mr-1 mb-1">Reset</button> --}}
                     </div>
                     </div>
@@ -309,15 +309,15 @@
 
 
     function getLocation(){
-     
+
     // get users lat/long
-    
+
     var getPosition = {
       enableHighAccuracy: false,
       timeout: 9000,
       maximumAge: 0
     };
-    
+
     function success(gotPosition) {
       var uLat = gotPosition.coords.latitude;
       var uLon = gotPosition.coords.longitude;
@@ -329,13 +329,13 @@
           draggable: true
         }).addTo(map);
       // console.log(`${uLat}`, `${uLon}`);
-    
+
     };
-    
+
     function error(err) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
     };
-    
+
     navigator.geolocation.getCurrentPosition(success, error, getPosition);
     };
 </script>
