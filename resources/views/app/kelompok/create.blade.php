@@ -14,6 +14,22 @@
     }
 </style>
 <section id="basic-vertical-layouts">
+<div class="row mb-2">
+    <div class="col-7 col-md-6">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Data Master</a></li>
+                <li class="breadcrumb-item"><a href="{{route('kelompok.index')}}"></a>Kelompok Tani</li>
+                <li class="breadcrumb-item active" aria-current="page">Tambah</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="col-5 col-md-6">
+        <span class="float-right">
+            <a href="{{route('kelompok.index')}}" class="btn btn-sm icon btn-warning p-2"><i data-feather="arrow-left" class="mr-2"></i>Kembali</a>
+        </span>
+    </div>
+</div>
 <div class="row match-height">
     <div class="col-md-6 col-12">
         <div class="card">
@@ -32,7 +48,9 @@
     <div class="col-md-6 col-12">
         <div class="card">
             <div class="card-header">
-            <h4 class="card-title">Tambah Kelompok Tani</h4>
+            <h4 class="card-title">
+                Tambah Kelompok Tani
+            </h4>
             </div>
             <div class="card-content">
             <div class="card-body">
@@ -45,33 +63,58 @@
                     <div class="col-12">
                         <div class="form-group">
                         <label for="nama-vertical">Nama Kelompok</label>
-                        <input type="text" id="nama-vertical" class="form-control" name="nama"
+                        <input type="text" id="nama-vertical" class="form-control @error('nama') is-invalid @enderror" name="nama"
                             placeholder="Nama Kelompok">
+
+                        @error('nama')
+                        <div class="invalid-feedback">
+                            <i class="bx bx-radio-circle"></i>
+                            {{{$message}}}
+                        </div>
+                        @enderror
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
                         <label for="ketua-vertical">Nama Ketua</label>
-                        <input type="text" id="ketua-vertical" class="form-control" name="ketua"
-                            placeholder="Nama Ketua">
+                        <input type="text" id="ketua-vertical" class="form-control @error('ketua') is-invalid @enderror" name="ketua" placeholder="Nama Ketua">
+                        @error('ketua')
+                        <div class="invalid-feedback">
+                            <i class="bx bx-radio-circle"></i>
+                            {{{$message}}}
+                        </div>
+                        @enderror
+                        </div>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
                         <label for="kontak-vertical">Kontak</label>
-                        <input type="text" id="kontak-vertical" class="form-control" name="kontak"
+                        <input type="text" id="kontak-vertical" class="form-control @error('kontak') is-invalid @enderror" name="kontak"
                             placeholder="Kontak">
+                        @error('kontak')
+                        <div class="invalid-feedback">
+                            <i class="bx bx-radio-circle"></i>
+                            {{{$message}}}
+                        </div>
+                        @enderror
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group">
                             <span class="label">Foto ketua</span>
                             <div class="form-file">
-                                <input type="file" class="form-file-input" name="foto_ketua" id="foto_ketua">
+                                <input type="file" class="form-file-input @error('foto_ketua') is-invalid @enderror" name="foto_ketua" id="foto_ketua">
                                 <label class="form-file-label" for="foto_ketua">
                                     <span class="form-file-text">Pilih Foto...</span>
                                     <span class="form-file-button">Browse</span>
                                 </label>
+                                @error('foto_ketua')
+                                <div class="invalid-feedback">
+                                    <i class="bx bx-radio-circle"></i>
+                                    {{{$message}}}
+                                </div>
+                                @enderror
                             </div>
                             {{-- <label for="foto_ketua">Foto Ketua</label>
                             <input type="file" class="form-file-input" id="foto_ketua">
@@ -119,7 +162,13 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label for="alamat" class="form-label">Alamat Detail</label>
-                            <textarea class="form-control" name="alamat" id="alamat" rows="3"></textarea>
+                            <textarea class="form-control @error('alamat')" name="alamat" id="alamat" rows="3"></textarea>
+                            @error('alamat')
+                            <div class="invalid-feedback">
+                                <i class="bx bx-radio-circle"></i>
+                                {{{$message}}}
+                            </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="col-12 d-flex justify-content-end">
