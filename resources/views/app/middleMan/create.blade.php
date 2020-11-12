@@ -4,7 +4,7 @@
 <style type="text/css">
     #map {
         width: 100%;
-        height: 400px;
+        height: 310px;
     }
     .form-group .label {
         font-size: 0.755rem;
@@ -19,14 +19,14 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Data Master</a></li>
-                <li class="breadcrumb-item"><a href="{{route('retailer.index')}}">Retailer</a></li>
+                <li class="breadcrumb-item"><a href="{{route('kelompok.index')}}">Retailer</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Tambah</li>
             </ol>
         </nav>
     </div>
     <div class="col-5 col-md-6">
         <span class="float-right">
-            <a href="{{route('retailer.index')}}" class="btn btn-sm icon btn-warning p-2"><i data-feather="arrow-left" class="mr-2"></i>Kembali</a>
+            <a href="{{route('kelompok.index')}}" class="btn btn-sm icon btn-warning p-2"><i data-feather="arrow-left" class="mr-2"></i> Kembali</a>
         </span>
     </div>
 </div>
@@ -39,7 +39,33 @@
             <div class="card-content">
             <div class="card-body">
                 <div id="map"></div>
-                <button class="btn btn-primary btn-block mt-4" onclick="getLocation()">Lokasi Saya</button>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                        <label for="latitude-view">Latitude</label>
+                        <input type="text" id="latitude-view" class="form-control @error('latitude') is-invalid @enderror" readonly>
+                        @error('latitude')
+                        <div class="invalid-feedback">
+                            <i class="bx bx-radio-circle"></i>
+                            {{{$message}}}
+                        </div>
+                        @enderror
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                        <label for="longitude-view">Longitude</label>
+                        <input type="text" id="longitude-view" class="form-control @error('longitude') is-invalid @enderror" readonly>
+                        @error('longitude')
+                        <div class="invalid-feedback">
+                            <i class="bx bx-radio-circle"></i>
+                            {{{$message}}}
+                        </div>
+                        @enderror
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" onclick="getLocation()">Lokasi Saya</button>
                 <small>*) Klik untuk mendapatkan lokasi anda saat ini</small>
             </div>
             </div>
@@ -49,12 +75,12 @@
         <div class="card">
             <div class="card-header">
             <h4 class="card-title">
-                Tambah Kelompok Tani
+                Tambah Retailer
             </h4>
             </div>
             <div class="card-content">
             <div class="card-body">
-                <form class="form form-vertical" action="{{route('kelompok.store')}}" method="post" enctype="multipart/form-data">
+                <form class="form form-vertical" action="{{route('retailer.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="form-body">
                     <input id="latitude" type="hidden" name="latitude" />
@@ -62,10 +88,9 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-                            <label for="nama-vertical">Nama Kelompok</label>
+                            <label for="nama-vertical">Nama Retailer</label>
                             <input type="text" id="nama-vertical" class="form-control @error('nama') is-invalid @enderror" name="nama"
-                                placeholder="Nama Kelompok">
-
+                                placeholder="Nama" value="{{old('nama')}}">
                             @error('nama')
                             <div class="invalid-feedback">
                                 <i class="bx bx-radio-circle"></i>
@@ -76,9 +101,13 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                            <label for="ketua-vertical">Nama Ketua</label>
-                            <input type="text" id="ketua-vertical" class="form-control @error('ketua') is-invalid @enderror" name="ketua" placeholder="Nama Ketua">
-                            @error('ketua')
+                            <label for="ketua-vertical">Jenis Usaha</label>
+                            <select name="jenis_usaha" id="" class="form-control">
+                                <option value="Perorangan">Perorangan</option>
+                                <option value="PT">PT</option>
+                                <option value="CV">CV</option>
+                            </select>
+                            @error('jenis_usaha')
                             <div class="invalid-feedback">
                                 <i class="bx bx-radio-circle"></i>
                                 {{{$message}}}
@@ -101,14 +130,14 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <span class="label">Foto ketua</span>
+                                <span class="label">Foto retailer</span>
                                 <div class="form-file">
-                                    <input type="file" class="form-file-input @error('foto_ketua') is-invalid @enderror" name="foto_ketua" id="foto_ketua">
-                                    <label class="form-file-label" for="foto_ketua">
+                                    <input type="file" class="form-file-input @error('foto') is-invalid @enderror" name="foto" id="foto">
+                                    <label class="form-file-label" for="foto">
                                         <span class="form-file-text">Pilih Foto...</span>
                                         <span class="form-file-button">Browse</span>
                                     </label>
-                                    @error('foto_ketua')
+                                    @error('foto')
                                     <div class="invalid-feedback">
                                         <i class="bx bx-radio-circle"></i>
                                         {{{$message}}}
@@ -126,36 +155,60 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="provinsi-select">Provinsi</label>
-                                <select class="form-select" id="provinsi-select">
+                                <select class="form-select @error('provinsi') is-invalid @enderror" id="provinsi-select" name="provinsi">
                                     <option value="">-- Pilih Disini --</option>
                                     @foreach($provinsi as $p)
                                     <option value="{{$p->id}}">{{$p->nama}}</option>
                                     @endforeach
                                 </select>
+                                @error('provinsi')
+                                <div class="invalid-feedback">
+                                    <i class="bx bx-radio-circle"></i>
+                                    {{{$message}}}
+                                </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="kabupaten-select">Kabupaten</label>
-                                <select class="form-select" id="kabupaten-select">
+                                <select class="form-select @error('kabupaten') is-invalid @enderror" id="kabupaten-select" name="kabupaten">
                                     <option value="">-- Pilih Disini --</option>
                                 </select>
+                                @error('kabupaten')
+                                <div class="invalid-feedback">
+                                    <i class="bx bx-radio-circle"></i>
+                                    {{{$message}}}
+                                </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="kecamatan-select">Kecamatan</label>
-                                <select class="form-select" id="kecamatan-select">
+                                <select class="form-select @error('kecamatan') is-invalid @enderror" id="kecamatan-select" name="kecamatan">
                                     <option value="">-- Pilih Disini --</option>
                                 </select>
+                                @error('kecamatan')
+                                <div class="invalid-feedback">
+                                    <i class="bx bx-radio-circle"></i>
+                                    {{{$message}}}
+                                </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="desa-select">Desa</label>
-                                <select class="form-select" id="desa-select" name="id_desa">
+                                <select class="form-select @error('desa') is-invalid @enderror" id="desa-select" name="desa">
                                     <option value="">-- Pilih Disini --</option>
                                 </select>
+                                @error('desa')
+                                <div class="invalid-feedback">
+                                    <i class="bx bx-radio-circle"></i>
+                                    {{{$message}}}
+                                </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-12">
@@ -305,6 +358,8 @@
     marker.on('dragend', function (e) {
       document.getElementById('latitude').value = marker.getLatLng().lat;
       document.getElementById('longitude').value = marker.getLatLng().lng;
+      document.getElementById('latitude-view').value = marker.getLatLng().lat;
+      document.getElementById('longitude-view').value = marker.getLatLng().lng;
     });
 
 
@@ -321,13 +376,22 @@
     function success(gotPosition) {
       var uLat = gotPosition.coords.latitude;
       var uLon = gotPosition.coords.longitude;
+      // console.log(uLat,uLon);
       document.getElementById('latitude').value = uLat;
       document.getElementById('longitude').value = uLon;
+      document.getElementById('latitude-view').value = uLat;
+      document.getElementById('longitude-view').value = uLon;
       map.setView(new L.LatLng(uLat, uLon), 10);
       map.removeLayer(marker);
       marker = L.marker([uLat, uLon],{
           draggable: true
         }).addTo(map);
+      marker.on('dragend', function (e) {
+        document.getElementById('latitude').value = marker.getLatLng().lat;
+        document.getElementById('longitude').value = marker.getLatLng().lng;
+        document.getElementById('latitude-view').value = marker.getLatLng().lat;
+        document.getElementById('longitude-view').value = marker.getLatLng().lng;
+      });
       // console.log(`${uLat}`, `${uLon}`);
 
     };
