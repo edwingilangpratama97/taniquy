@@ -81,11 +81,86 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-12">
-                        <div id="foto_ketua"></div>
+                    <div class="col-12 text-center">
+                        <span>Foto Ketua</span><br>
+                        <div id="foto_ketua" class="my-4"></div>
                     </div>
                     <div class="col-6">
-                        
+                        Kode Kelompok
+                    </div>
+                    <div class="col-6">
+                        <span class="float-left">:</span>
+                        <div id="kode_kelompok" class="float-right"></div>
+                    </div>
+                    <div class="col-6">
+                        Nama kelompok
+                    </div>
+                    <div class="col-6">
+                        <span class="float-left">:</span>
+                        <div id="nama_kelompok" class="float-right"></div>
+                    </div>
+                    <div class="col-6">
+                        Nama Ketua
+                    </div>
+                    <div class="col-6">
+                        <span class="float-left">:</span>
+                        <div id="ketua" class="float-right"></div>
+                    </div>
+                    <div class="col-6">
+                        Kontak
+                    </div>
+                    <div class="col-6">
+                        <span class="float-left">:</span>
+                        <div id="kontak" class="float-right"></div>
+                    </div>
+                    <div class="col-6">
+                        Latitude
+                    </div>
+                    <div class="col-6">
+                        <span class="float-left">:</span>
+                        <div id="latitude" class="float-right"></div>
+                    </div>
+                    <div class="col-6">
+                        Longitude
+                    </div>
+                    <div class="col-6">
+                        <span class="float-left">:</span>
+                        <div id="longitude" class="float-right"></div>
+                    </div>
+                    <div class="col-6">
+                        Desa
+                    </div>
+                    <div class="col-6">
+                        <span class="float-left">:</span>
+                        <div id="desa" class="float-right"></div>
+                    </div>
+                    <div class="col-6">
+                        Kecamatan
+                    </div>
+                    <div class="col-6">
+                        <span class="float-left">:</span>
+                        <div id="kecamatan" class="float-right"></div>
+                    </div>
+                    <div class="col-6">
+                        Kabupaten
+                    </div>
+                    <div class="col-6">
+                        <span class="float-left">:</span>
+                        <div id="kabupaten" class="float-right"></div>
+                    </div>
+                    <div class="col-6">
+                        Provinsi
+                    </div>
+                    <div class="col-6">
+                        <span class="float-left">:</span>
+                        <div id="provinsi" class="float-right"></div>
+                    </div>
+                    <div class="col-6">
+                        Alamat Detail
+                    </div>
+                    <div class="col-6">
+                        <span class="float-left">:</span>
+                        <div id="alamat" class="float-right"></div>
                     </div>
                 </div>
             </div>
@@ -147,8 +222,11 @@ function getKelompok(id){
           $("#kecamatan").text(json.data.desa.kecamatan.nama);
           $("#kabupaten").text(json.data.desa.kecamatan.kabupaten.nama);
           $("#provinsi").text(json.data.desa.kecamatan.kabupaten.provinsi.nama);
-          $("#foto_ketua").html(`<img src="{{asset('${json.data.foto_ketua}')}}">`);
-          console.log(json.data);
+          if (json.data.foto_ketua == null) {
+              $("#foto_ketua").text('- Tidak Ada Foto Ketua -');
+          }else{
+              $("#foto_ketua").html(`<img class="foto-ketua" src="{{asset('${json.data.foto_ketua}')}}">`);
+          }
           // if (json.code == 200) {
           //     for (i = 0; i < Object.keys(json.data).length; i++) {
           //         // console.log(json.data[i].nama);
