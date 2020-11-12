@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Desa;
+use App\Models\Provinsi;
 use App\Models\Enduser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +23,7 @@ class EnduserController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($data){
-                    return '<span><a href="/v1/customer/'.$data->id.'/edit" data-toggle="tooltip" class="text-dark" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>&nbsp;<a data-toggle="tooltip" data-placement="top" onclick="sweet('.$data->id.')" title="Delete" style="cursor: pointer; margin-left: 2px;"><i class="fas fa-trash color-danger"></i></a></span>';
+                    return '<a href="#" class="text-warning" data-toggle="modal" data-target="#warning" onclick="getEnduser('.$data->id.')"><i class="fa fa-eye"></i></a>&nbsp;<a href="/v1/customer/'.$data->id.'/edit" class="text-primary"><i class="fa fa-edit"></i></a>&nbsp;<a href="#" class="text-danger" onclick="sweet('.$data->id.')"><i class="fa fa-trash"></i></a>';
                 })
                 ->make(true);
         }
@@ -37,8 +37,8 @@ class EnduserController extends Controller
      */
     public function create()
     {
-        $desa = Desa::all();
-        return view('app.middleMan.create',compact('desa'));
+        $provinsi = Provinsi::all();
+        return view('app.endUser.create',compact('provinsi'));
     }
 
     /**
@@ -49,12 +49,16 @@ class EnduserController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $v = Validator::make($request->all(),[
-            'id_desa' => 'required',
+            'desa' => 'required',
+            'kecamatan' => 'required',
+            'kabupaten' => 'required',
+            'provinsi' => 'required',
             'nama' => 'required|string|max:100',
             'jenis_kelamin' => 'required|in:L,P',
             'tgl_lahir' => 'required|date',
-            'kontak' => 'required|numeric|max:12|',
+            'kontak' => 'required|numeric',
             'alamat' => 'required|string|max:255',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
@@ -62,21 +66,34 @@ class EnduserController extends Controller
         ]);
 
         if ($v->fails()) {
+            dd($v->errors()->all());
             return back()->withErrors($v)->withInput();
         } else {
-            $retailer = Enduser::count();
+            // dd($request->file('foto'));
+            $enduser = Enduser::count();
             $date = date("Ymd");
-            $kode = sprintf("RT".$date."%'.04d\n", $retailer+1);
+            $kode = sprintf("EU".$date."%'.04d\n", $enduser+1);
+            if ($request->file('foto')) {
+                $name = $request->file('foto');
+                $foto = time()."_".$name->getClientOriginalName();
+                $request->foto->move(public_path("upload/foto/enduser"), $foto);
+                $create = Enduser::create(array_merge($request->only('nama','jenis_kelamin','tgl_lahir','kontak','alamat','latitude','longitude'),[
+                    'foto' => 'upload/foto/enduser/'.$foto,
+                    'kode_enduser' => $kode,
+                    'id_desa' => $request->desa
+                ]));
+            } else {
+                $create = Enduser::create(array_merge($request->only('nama','jenis_kelamin','tgl_lahir','kontak','alamat','latitude','longitude'),[
+                    'kode_enduser' => $kode,
+                    'id_desa' => $request->desa
+                ]));
+            }
 
-            $name = $request->file('foto');
-            $foto = time()."_".$name->getClientOriginalName();
-            $request->foto->move(public_path("upload/foto/retailer"), $foto);
-            Enduser::create(array_merge($request->only('id_desa','nama','jenis_kelamin','tgl_lahir','kontak','alamat','latitude','longitude'),[
-                'foto' => 'upload/foto/retailer/'.$foto,
-                'kode_retailer' => $kode
-            ]));
-
-            return back()->with('success',  __('Successfully created data.'));
+            if ($create = true) {
+                return redirect('v1/customer')->with('success',  __('Create Data Berhasil.'));
+            } else {
+                return redirect('v1/customer')->with('failed',  __('Create Data Gagal.'));
+            }
         }
     }
 
@@ -88,7 +105,11 @@ class EnduserController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Enduser::with('desa.kecamatan.kabupaten.provinsi')->where('id',$id)->first();
+        return response()->json([
+            'code' => 200,
+            'data' => $data
+        ]);
     }
 
     /**
@@ -99,9 +120,9 @@ class EnduserController extends Controller
      */
     public function edit($id)
     {
-        $desa = Desa::all();
+        $provinsi = Provinsi::all();
         $data = Enduser::find($id);
-        return view('app.endUser.edit',compact('desa','data'));
+        return view('app.endUser.edit',compact('provinsi','data'));
     }
 
     /**
@@ -114,11 +135,14 @@ class EnduserController extends Controller
     public function update(Request $request, $id)
     {
         $v = Validator::make($request->all(),[
-            'id_desa' => 'required',
+            'desa' => 'required',
+            'kecamatan' => 'required',
+            'kabupaten' => 'required',
+            'provinsi' => 'required',
             'nama' => 'required|string|max:100',
             'tgl_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:L,P',
-            'kontak' => 'required|numeric|max:12|',
+            'kontak' => 'required|numeric',
             'alamat' => 'required|string|max:255',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
@@ -130,22 +154,36 @@ class EnduserController extends Controller
         } else {
             $data = Enduser::find($id);
 
-            if ($request->file != '') {
-                $path = public_path().'/upload/foto/retailer';
-                if ($data->file != ''  && $data->file != null) {
-                    $file_old = $path.$data->file;
-                    unlink($file_old);
+            if ($request->file('foto') != '') {
+                $name = $request->file('foto');
+                $foto = time()."_".$name->getClientOriginalName();
+                $request->foto->move(public_path("upload/foto/enduser"), $foto);
+                if ($request->desa == null) {
+                    $data->update(array_merge($request->only('nama','jenis_kelamin','tgl_lahir','kontak','alamat','latitude','longitude'),[
+                        'foto' => $filename,
+                    ]));
+                } else {
+                    $data->update(array_merge($request->only('nama','jenis_kelamin','tgl_lahir','kontak','alamat','latitude','longitude'),[
+                        'foto' => $filename,
+                        'id_desa' => $request->desa
+                    ]));
                 }
-                $file = $request->file;
-                $filename = $file->getClientOriginalName();
-                $file->move($path,$filename);
 
-                $data->update(array_merge($request->only('id_desa','nama','jenis_kelamin','tgl_lahir','kontak','alamat','latitude','longitude'),[
-                    'foto' => $filename
-                ]));
-
+            } else {
+                if ($request->desa == null) {
+                    $data->update(array_merge($request->only('nama','jenis_kelamin','tgl_lahir','kontak','alamat','latitude','longitude')));
+                } else {
+                    // dd($request->all());
+                    $data->update(array_merge($request->only('nama','jenis_kelamin','tgl_lahir','kontak','alamat','latitude','longitude'),[
+                        'id_desa' => $request->desa
+                    ]));
+                }
             }
-            return back()->with('success',  __('Successfully updated data.'));
+            if ($data = true) {
+                return redirect('v1/customer')->with('success',  __('Update Data Berhasil.'));
+            } else {
+                return redirect('v1/customer')->with('failed',  __('Update Data Gagal.'));
+            }
         }
     }
 
