@@ -30,7 +30,7 @@
             <li class="dropdown">
                 <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                     <div class="avatar mr-1">
-                        <img src="{{asset('assets/images/avatar/avatar-s-1.png')}}" alt="" srcset="">
+                        <img src="{{\Avatar::create(isset(Auth::user()->id_kelompok) ? Auth::user()->kelompok->nama :  (isset(Auth::user()->id_retailer) ? Auth::user()->retailer->nama :(isset(Auth::user()->id_enduser) ? Auth::user()->enduser->nama : Auth::user()->name)))->toBase64()}}" alt="" srcset="">
                     </div>
                     <div class="d-none d-md-block d-lg-inline-block">Hi, Saugi</div>
                 </a>
