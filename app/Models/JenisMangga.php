@@ -13,4 +13,9 @@ class JenisMangga extends Model
     {
     	return $this->hasMany('App\Models\Mangga');
     }
+
+    public function kebutuhan()
+    {
+        return $this->hayMany('App\Models\Kebutuhan');
+    }
 }

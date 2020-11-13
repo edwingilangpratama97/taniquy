@@ -19,7 +19,7 @@ class PemesananSeeder extends Seeder
         	'kode_pemesanan' => $kode,
         	'id_postingan' => 2,
         	'id_enduser' => 1,
-        	'role' => 'enduser',
+        	// 'role' => 'enduser',
         	'jumlah' => 100
         ]);
 
@@ -30,7 +30,7 @@ class PemesananSeeder extends Seeder
         	'kode_pemesanan' => $kode,
         	'id_postingan' => 1,
         	'id_retailer' => 1,
-        	'role' => 'retailer',
+        	// 'role' => 'retailer',
         	'jumlah' => 100
         ]);
     }

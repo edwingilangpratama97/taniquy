@@ -20,7 +20,7 @@ class ManggaSeeder extends Seeder
         	'id_jenis' => 1,
         	'id_grade' => 1,
         	'kode_mangga' => $kode,
-        	'role' => 'kelompok',
+        	// 'role' => 'kelompok',
         	'harga' => 10000,
         	'stok' => 100
         ]);
@@ -33,7 +33,7 @@ class ManggaSeeder extends Seeder
         	'id_jenis' => 1,
         	'id_grade' => 1,
         	'kode_mangga' => $kode,
-        	'role' => 'retailer',
+        	// 'role' => 'retailer',
         	'harga' => 10000,
         	'stok' => 100
         ]);

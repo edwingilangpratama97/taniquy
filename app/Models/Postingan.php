@@ -26,6 +26,6 @@ class Postingan extends Model
 
     public function retailer()
     {
-    	return $this->belongsTo('App\Models\Retailer','retailer_id');
+    	return $this->belongsTo('App\Models\Retailer','id_retailer');
     }
 }

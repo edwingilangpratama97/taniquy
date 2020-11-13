@@ -11,12 +11,17 @@ class Kebutuhan extends Model
 
     public function enduser()
     {
-    	return $this->belongsTo('App\Models\Enduser','enduser_id');
+    	return $this->belongsTo('App\Models\Enduser','id_enduser');
     }
 
     public function retailer()
     {
     	return $this->belongsTo('App\Models\Retailer','id_retailer');
+    }
+
+    public function jenis()
+    {
+        return $this->belongsTo('App\Models\JenisMangga','id_jenis');
     }
 
     public function penawaran()

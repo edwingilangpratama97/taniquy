@@ -4,6 +4,7 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Auth;
 
 class DashboardController extends Controller
 {
@@ -14,7 +15,24 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('app.dashboard');
+        $auth = Auth::user();
+        if ($auth->id_kelompok != null) {
+            if($auth->kelompok->latitude == null || $auth->kelompok->longitude == null){
+                echo "Anda Kelompok Tani Isi Dulu Kelengkapan Akun Anda";
+            }
+        }else if ($auth->id_retailer != null) {
+            if($auth->retailer->latitude == null || $auth->kelompok->longitude == null){
+                echo "Anda Retailer Tani Isi Dulu Kelengkapan Akun Anda";
+            }
+        } elseif ($auth->id_enduser != null) {
+            if($auth->enduser->latitude == null || $auth->kelompok->longitude == null){
+                echo "Anda Enduser Tani Isi Dulu Kelengkapan Akun Anda";
+            }
+        } else {
+            // echo "Anda Sang Dewa";
+            return view('app.dashboard');
+        }
+        // return view('app.dashboard');
     }
 
     /**
