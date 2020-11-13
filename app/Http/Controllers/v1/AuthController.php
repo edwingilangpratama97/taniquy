@@ -47,6 +47,7 @@ class AuthController extends Controller
     }
     public function updateAccountAdmin()
     {
+        $auth = Auth::user();
         $data = User::find($auth->id);
         return view('app.account.updateAccountAdmin',compact('data'));
     }
