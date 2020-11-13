@@ -18,7 +18,7 @@ class CreateKebutuhansTable extends Migration
             $table->string('kode_kebutuhan')->unique();
             $table->foreignId('id_enduser')->nullable()->constrained('endusers')->onDelete('set null');
             $table->foreignId('id_retailer')->nullable()->constrained('retailers')->onDelete('set null');
-            $table->enum('role',['enduser','retailer']);
+            // $table->enum('role',['enduser','retailer']);
             $table->foreignId('id_jenis')->nullable()->constrained('jenis_manggas')->onDelete('set null');
             $table->integer('jumlah');
             $table->timestamps();

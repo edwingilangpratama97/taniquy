@@ -17,14 +17,14 @@ class CreateEndusersTable extends Migration
             $table->id();
             $table->string('kode_enduser')->unique();
             $table->foreignId('id_desa')->nullable()->constrained('desas')->onDelete('set null');
-            $table->string('nama', 100);
+            $table->string('nama', 100)->nullable();
             $table->string('foto')->nullable();
-            $table->date('tgl_lahir');
-            $table->enum('jenis_kelamin', ['L','P']);
-            $table->string('kontak', 20);
-            $table->text('alamat');
-            $table->string('latitude', 100);
-            $table->string('longitude', 100);
+            $table->date('tgl_lahir')->nullable();
+            $table->enum('jenis_kelamin', ['L','P'])->nullable();
+            $table->string('kontak', 20)->nullable();
+            $table->text('alamat')->nullable();
+            $table->string('latitude', 100)->nullable();
+            $table->string('longitude', 100)->nullable();
             $table->timestamps();
         });
     }

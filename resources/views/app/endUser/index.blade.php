@@ -12,7 +12,7 @@
             <nav aria-label="breadcrumb" class='breadcrumb-header'>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">Data Master</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Pelanggan/li>
+                    <li class="breadcrumb-item active" aria-current="page">Pelanggan</li>
                 </ol>
             </nav>
         </div>

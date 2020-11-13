@@ -19,7 +19,7 @@ class CreatePostingansTable extends Migration
             $table->foreignId('id_mangga')->nullable()->constrained('manggas')->onDelete('set null');
             $table->foreignId('id_kelompok')->nullable()->constrained('kelompok_tanis')->onDelete('set null');
             $table->foreignId('id_retailer')->nullable()->constrained('retailers')->onDelete('set null');
-            $table->enum('role',['kelompok','retailer']);
+            // $table->enum('role',['kelompok','retailer']);
             $table->text('keterangan')->nullable();
             $table->timestamps();
         });
