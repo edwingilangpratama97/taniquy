@@ -29,13 +29,13 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="card to-image-account p-1">
+                                <div class="card to-image-account p-3">
                                     <div class="row">
                                         <div class="col-md-2 image-account">
                                             <img src="{{\Avatar::create(isset(Auth::user()->id_kelompok) ? Auth::user()->kelompok->nama :  (isset(Auth::user()->id_retailer) ? Auth::user()->retailer->nama :(isset(Auth::user()->id_enduser) ? Auth::user()->enduser->nama : Auth::user()->name)))->toBase64()}}" alt="" srcset="">
                                         </div>
                                         <div class="col-md-10 center-text">
-                                            {{Auth::user()->name}}
+                                                {{ isset(Auth::user()->id_kelompok) ? Auth::user()->kelompok->nama :  (isset(Auth::user()->id_retailer) ? Auth::user()->retailer->nama :(isset(Auth::user()->id_enduser) ? Auth::user()->enduser->nama : Auth::user()->name)) }}
                                         </div>
                                     </div>
                                 </div>
@@ -49,10 +49,16 @@
                                         Nama : {{ isset(Auth::user()->id_kelompok) ? Auth::user()->kelompok->nama :  (isset(Auth::user()->id_retailer) ? Auth::user()->retailer->nama :(isset(Auth::user()->id_enduser) ? Auth::user()->enduser->nama : Auth::user()->name)) }}
                                     </p>
                                     <p class="card-text">
+                                        Username : {{ Auth::user()->name }}
+                                    </p>
+                                    <p class="card-text">
                                         Email : {{Auth::user()->email}}
                                     </p>
                                     <p class="card-text">
-
+                                        Alamat : {{ isset(Auth::user()->id_kelompok) ? Auth::user()->kelompok->alamat :  (isset(Auth::user()->id_retailer) ? Auth::user()->retailer->alamat :(isset(Auth::user()->id_enduser) ? Auth::user()->enduser->alamat : Auth::user()->name)) }}
+                                    </p>
+                                    <p class="card-text">
+                                        Kontak : {{ isset(Auth::user()->id_kelompok) ? Auth::user()->kelompok->kontak :  (isset(Auth::user()->id_retailer) ? Auth::user()->retailer->kontak :(isset(Auth::user()->id_enduser) ? Auth::user()->enduser->kontak : Auth::user()->name)) }}
                                     </p>
                                 </div>
                             </div>
