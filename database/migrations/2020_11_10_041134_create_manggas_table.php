@@ -17,7 +17,7 @@ class CreateManggasTable extends Migration
             $table->id();
             $table->foreignId('id_kelompok')->nullable()->constrained('kelompok_tanis')->onDelete('set null');
             $table->foreignId('id_retailer')->nullable()->constrained('retailers')->onDelete('set null');
-            $table->enum('role',['kelompok','retailer'])->nullable();
+            // $table->enum('role',['kelompok','retailer'])->nullable();
             $table->foreignId('id_jenis')->nullable()->constrained('jenis_manggas')->onDelete('set null');
             $table->foreignId('id_grade')->nullable()->constrained('grades')->onDelete('set null');
             $table->string('kode_mangga')->unique();

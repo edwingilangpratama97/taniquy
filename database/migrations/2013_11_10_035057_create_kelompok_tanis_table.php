@@ -17,13 +17,13 @@ class CreateKelompokTanisTable extends Migration
             $table->id();
             $table->string('kode_kelompok')->unique();
             $table->foreignId('id_desa')->nullable()->constrained('desas')->onDelete('set null');
-            $table->string('nama', 100);
-            $table->string('ketua', 100);
-            $table->string('kontak', 20);
+            $table->string('nama', 100)->nullable();
+            $table->string('ketua', 100)->nullable();
+            $table->string('kontak', 20)->nullable();
             $table->text('foto_ketua')->nullable();
-            $table->text('alamat');
-            $table->string('latitude', 100);
-            $table->string('longitude', 100);
+            $table->text('alamat')->nullable();
+            $table->string('latitude', 100)->nullable();
+            $table->string('longitude', 100)->nullable();
             $table->timestamps();
         });
     }

@@ -17,13 +17,13 @@ class CreateRetailersTable extends Migration
             $table->id();
             $table->string('kode_retailer')->unique();
             $table->foreignId('id_desa')->nullable()->constrained('desas')->onDelete('set null');
-            $table->string('nama', 100);
-            $table->enum('jenis_usaha', ['PT','CV','Perorangan']);
-            $table->string('kontak', 20);
+            $table->string('nama', 100)->nullable();
+            $table->enum('jenis_usaha', ['PT','CV','Perorangan'])->nullable();
+            $table->string('kontak', 20)->nullable();
             $table->string('foto')->nullable();
-            $table->text('alamat');
-            $table->string('latitude', 100);
-            $table->string('longitude', 100);
+            $table->text('alamat')->nullable();
+            $table->string('latitude', 100)->nullable();
+            $table->string('longitude', 100)->nullable();
             $table->timestamps();
         });
     }

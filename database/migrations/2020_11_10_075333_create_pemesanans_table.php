@@ -19,7 +19,7 @@ class CreatePemesanansTable extends Migration
             $table->foreignId('id_postingan')->nullable()->constrained('postingans')->onDelete('set null');
             $table->foreignId('id_enduser')->nullable()->constrained('endusers')->onDelete('set null');
             $table->foreignId('id_retailer')->nullable()->constrained('retailers')->onDelete('set null');
-            $table->enum('role',['enduser','retailer']);
+            // $table->enum('role',['enduser','retailer']);
             $table->integer('jumlah');
             $table->timestamps();
         });
