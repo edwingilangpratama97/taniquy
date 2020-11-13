@@ -28,5 +28,9 @@ Route::group(['prefix'=>'v1','namespace'=>'v1','middleware'=>'auth'], function()
 	Route::resource('mangga','ManggaController');
 	Route::resource('jenisMangga','JenisManggaController');
 	Route::resource('grade','GradeController');
+	Route::resource('postingan','PostinganController');
+	Route::resource('pemesanan','PemesananController');
+	Route::resource('kebutuhan','KebutuhanController');
+	Route::resource('penawaran','PenawaranController');
 });
 

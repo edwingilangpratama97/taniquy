@@ -20,7 +20,7 @@ class PenawaranSeeder extends Seeder
     		'id_kebutuhan' => 1,
     		'id_mangga' => 2,
     		'id_retailer' => 1,
-    		'role' => 'retailer'
+    		// 'role' => 'retailer'
     	]);
 
     	$penawaran = Penawaran::count();
@@ -31,7 +31,7 @@ class PenawaranSeeder extends Seeder
     		'id_kebutuhan' => 2,
     		'id_mangga' => 1,
     		'id_kelompok' => 1,
-    		'role' => 'kelompok'
+    		// 'role' => 'kelompok'
     	]);
 
     }
