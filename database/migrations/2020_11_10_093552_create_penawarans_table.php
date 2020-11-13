@@ -20,6 +20,8 @@ class CreatePenawaransTable extends Migration
             $table->foreignId('id_mangga')->nullable()->constrained('manggas')->onDelete('set null');
             $table->foreignId('id_kelompok')->nullable()->constrained('kelompok_tanis')->onDelete('set null');
             $table->foreignId('id_retailer')->nullable()->constrained('retailers')->onDelete('set null');
+            $table->boolean('status_pembayaran')->default(0); // Apakah Pembeli sudah bayar? di approve penjual
+            $table->boolean('status_penerimaan')->default(0); // Apakah Barang sudah diterima? di approve pembeli
             // $table->enum('role',['kelompok','retailer']);
             $table->timestamps();
         });

@@ -19,7 +19,7 @@ class PostinganSeeder extends Seeder
         	'kode_postingan' => $kode,
         	'id_mangga' => 1,
         	'id_kelompok' => 1,
-        	'role' => 'kelompok',
+        	// 'role' => 'kelompok',
         	'keterangan' => 'Buah Asli dari Bandung'
         ]);
 
@@ -30,7 +30,7 @@ class PostinganSeeder extends Seeder
         	'kode_postingan' => $kode,
         	'id_mangga' => 2,
         	'id_retailer' => 1,
-        	'role' => 'retailer',
+        	// 'role' => 'retailer',
         	'keterangan' => 'Buah Asli dari Retailer'
         ]);
     }

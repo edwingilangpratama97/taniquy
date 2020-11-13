@@ -60,6 +60,40 @@
                         </li>
                     </ul>
                 </li>
+                <li class="sidebar-item has-sub
+                    {{ Request::is('v1/postingan*') ? 'active' : false }}
+                    {{ Request::is('v1/pemesanan*') ? 'active' : false }}
+                    {{ Request::is('v1/kebutuhan*') ? 'active' : false }}
+                    {{ Request::is('v1/penawaran*') ? 'active' : false }}
+                    ">
+                    <a href="#" class='sidebar-link'>
+                        <i data-feather="file-text" width="20"></i>
+                        <span>Data Jual Beli</span>
+                    </a>
+                    <ul class="submenu
+                    {{ Request::is('v1/postingan*') ? 'active' : false }}
+                    {{ Request::is('v1/pemesanan*') ? 'active' : false }}
+                    {{ Request::is('v1/kebutuhan*') ? 'active' : false }}
+                    {{ Request::is('v1/penawaran*') ? 'active' : false }}
+                    ">
+
+                        <li>
+                            <a href="{{route('postingan.index')}}">Postingan Penjual</a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('pemesanan.index')}}">Pemesanan Pembeli</a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('kebutuhan.index')}}">Kebutuhan Pembeli</a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('penawaran.index')}}">Penawaran Penjual</a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="sidebar-item">
                     <a href="#" class='sidebar-link'>
                         <i data-feather="settings" width="20"></i>

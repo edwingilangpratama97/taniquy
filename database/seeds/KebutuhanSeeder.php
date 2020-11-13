@@ -18,7 +18,7 @@ class KebutuhanSeeder extends Seeder
         Kebutuhan::create([
         	'kode_kebutuhan' => $kode,
         	'id_enduser' => 1,
-        	'role' => 'enduser',
+        	// 'role' => 'enduser',
         	'id_jenis' => 1,
         	'jumlah' => 10
         ]);
@@ -29,7 +29,7 @@ class KebutuhanSeeder extends Seeder
         Kebutuhan::create([
         	'kode_kebutuhan' => $kode,
         	'id_retailer' => 1,
-        	'role' => 'retailer',
+        	// 'role' => 'retailer',
         	'id_jenis' => 1,
         	'jumlah' => 100
         ]);
