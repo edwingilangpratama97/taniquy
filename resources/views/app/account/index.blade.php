@@ -62,22 +62,24 @@
                                     </p>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-6">
-                                <div class="float-right">
-                                    <div class="row">
-                                        @if (Auth::user()->id_retailer != null)
-                                            <a href="{{ route('updateAkunRetailer') }}" class="btn btn-primary btn-sm"><i class="mdi mdi-account-edit"></i> Update Account</a>
-                                        @elseif (Auth::user()->id_kelompok != null)
-                                            <a href="{{ route('updateAkunKelompok') }}" class="btn btn-primary btn-sm"><i class="mdi mdi-account-edit"></i> Update Account</a>
-                                        @elseif(Auth::user()->id_enduser != null)
-                                            <a href="{{ route('updateAkunEnduser') }}" class="btn btn-primary btn-sm"><i class="mdi mdi-account-edit"></i> Update Account</a>
-                                        @elseif(Auth::user()->role == 'admin')
-                                            <a href="{{ route('updateAkunAdmin') }}" class="btn btn-primary btn-sm"><i class="mdi mdi-account-edit"></i> Update Account</a>
-                                        @endif
-                                    </div>
-                                    <div class="row mt-2">
-                                        <a href="{{ route('updatePassword') }}" class="btn btn-primary btn-sm"><i class="mdi mdi-account-key"></i> Update Password</a>
-                                    </div>
+                                <div class="float-left pt-2">
+                                    @if (Auth::user()->id_retailer != null)
+                                        <a href="{{ route('updateAkunRetailer') }}" class="btn btn-primary btn-sm"><i class="mdi mdi-account-edit"></i> Update Account</a>
+                                    @elseif (Auth::user()->id_kelompok != null)
+                                        <a href="{{ route('updateAkunKelompok') }}" class="btn btn-primary btn-sm"><i class="mdi mdi-account-edit"></i> Update Account</a>
+                                    @elseif(Auth::user()->id_enduser != null)
+                                        <a href="{{ route('updateAkunEnduser') }}" class="btn btn-primary btn-sm"><i class="mdi mdi-account-edit"></i> Update Account</a>
+                                    @elseif(Auth::user()->role == 'admin')
+                                        <a href="{{ route('updateAkunAdmin') }}" class="btn btn-primary btn-sm"><i class="mdi mdi-account-edit"></i> Update Account</a>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="float-right pt-2">
+                                    <a href="{{ route('updatePassword') }}" class="btn btn-primary btn-sm"><i class="mdi mdi-account-key"></i> Update Password</a>
                                 </div>
                             </div>
                         </div>
