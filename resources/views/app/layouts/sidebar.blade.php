@@ -94,7 +94,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="sidebar-item">
+                <li class="sidebar-item {{ Request::is('v1/setApp*') ? 'active' : false }}">
                     <a href="{{route('setApp.index')}}" class='sidebar-link'>
                         <i data-feather="settings" width="20"></i>
                         <span>Settings</span>

@@ -33,6 +33,7 @@ Route::group(['prefix'=>'v1','namespace'=>'v1','middleware'=>'auth'], function()
     Route::put('updateAccountAdmin/{id}','AuthController@updateAkunAdmin')->name('updateAccountAdmin');
     Route::get('updatePassword','AuthController@updatePassword')->name('updatePassword');
     Route::put('updatePassword/{id}','AuthController@actionUpdatePassword')->name('actionUpdatePassword');
+    Route::get('notif','NotifController@notif')->name('notif');
 
 	Route::resource('kelompok','KelompokTaniController');
 	Route::resource('retailer','RetailerController');

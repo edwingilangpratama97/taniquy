@@ -23,4 +23,8 @@ class Pemesanan extends Model
     {
     	return $this->belongsTo('App\Models\Retailer','id_retailer');
     }
+    public function notification()
+    {
+        return $this->hasMany('App\Models\Notification','id_pemesanan');
+    }
 }
