@@ -136,3 +136,9 @@ table.dataTable {
     margin-top: 25px;
     font-size: medium;
 }
+/*.auth-logo {
+    position:  absolute; 
+    left:  4rem;
+    top:  1rem;
+    z-index:  1;
+}*/
