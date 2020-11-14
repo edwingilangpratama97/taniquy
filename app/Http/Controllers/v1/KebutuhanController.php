@@ -4,8 +4,11 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\JenisMangga;
 use App\Models\Kebutuhan;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use Auth;
 
 class KebutuhanController extends Controller
 {
@@ -42,7 +45,8 @@ class KebutuhanController extends Controller
      */
     public function create()
     {
-        //
+        $jenis = JenisMangga::all();
+        return view('app.kebutuhan.create',compact('jenis'));
     }
 
     /**
@@ -53,7 +57,50 @@ class KebutuhanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        $v = Validator::make($request->all(),[
+            'id_jenis' => 'required',
+            'pemesan' => 'required',
+            'jumlah' => 'required'
+        ]);
+
+
+        if ($v->fails()) {
+            // dd($v->errors($v)->all());
+            return back()->withErrors($v)->withInput();
+        } else {
+            // $postingan = Postingan::where('id',$request->id_postingan)->first();
+
+            if($request->role == 'retailer') {
+                $kebutuhan = Kebutuhan::count();
+                $date = date("Ymd");
+                $kode = sprintf("KR".$date."%'.04d", $kebutuhan+1);
+                // dd($kode);
+                $create = Kebutuhan::create([
+                    'kode_kebutuhan' => $kode,
+                    'id_jenis' => $request->id_jenis,
+                    'id_retailer' => $request->pemesan,
+                    'jumlah' => $request->jumlah
+                ]);
+            } elseif ($request->role == 'enduser') {
+                $kebutuhan = Kebutuhan::count();
+                $date = date("Ymd");
+                $kode = sprintf("KE".$date."%'.04d", $kebutuhan+1);
+                // dd($kode);
+                $create = Kebutuhan::create([
+                    'kode_kebutuhan' => $kode,
+                    'id_jenis' => $request->id_jenis,
+                    'id_enduser' => $request->pemesan,
+                    'jumlah' => $request->jumlah
+                ]);
+            }
+
+            if ($create = true) {
+                return redirect('v1/kebutuhan')->with('success',  __('Create Data Berhasil.'));
+            } else {
+                return redirect('v1/kebutuhan')->with('failed',  __('Create Data Gagal.'));
+            }
+        }
     }
 
     /**
@@ -75,7 +122,19 @@ class KebutuhanController extends Controller
      */
     public function edit($id)
     {
-        //
+        $jenis = JenisMangga::all();
+        $data = Kebutuhan::find($id);
+        if($data->id_retailer != null) {
+            $role = "Retailer";
+            $pemesan = $data->retailer;
+        } elseif ($data->id_enduser != null) {
+            $role = "Pelanggan (Enduser)";
+            $pemesan = $data->enduser;
+        }
+        // dd($pemesan);
+        return view('app.kebutuhan.edit',compact('data','jenis','pemesan','role'));
+        // $data = Kebutuhan::find($id);
+        // return view('app.kebutuhan.edit', compact('data'));
     }
 
     /**
@@ -87,7 +146,39 @@ class KebutuhanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $v = Validator::make($request->all(),[
+            'jenis' => 'required',
+            'jumlah' => 'required',
+        ]);
+
+        if ($v->fails()) {
+            // dd($v->errors($v)->all());
+            return back()->withErrors($v)->withInput();
+        } else {
+        // dd($request->all());
+            $kebutuhan = Kebutuhan::where('id',$id);
+            if($request->id_retailer != null) {
+                // dd($kode);
+                $update = $kebutuhan->update([
+                    'id_jenis' => $request->jenis,
+                    // 'id_retailer' => $request->id_retailer,
+                    'jumlah' => $request->jumlah
+                ]);
+            } elseif ($request->id_kelompok != null) {
+                // dd($kode);
+                $update = $kebutuhan->update([
+                    'id_jenis' => $request->jenis,
+                    // 'id_kelompok' => $request->id_kelompok,
+                    'jumlah' => $request->jumlah
+                ]);
+            }
+
+            if ($update = true) {
+                return redirect('v1/kebutuhan')->with('success',  __('Update Data Berhasil.'));
+            } else {
+                return redirect('v1/kebutuhan')->with('failed',  __('Update Data Gagal.'));
+            }
+        }
     }
 
     /**
@@ -98,6 +189,12 @@ class KebutuhanController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete = Kebutuhan::find($id)->delete();
+
+        if ($delete = true) {
+            return redirect('v1/kebutuhan')->with('success',  __('Delete Data Berhasil.'));
+        } else {
+            return redirect('v1/kebutuhan')->with('failed',  __('Delete Data Gagal.'));
+        }
     }
 }
