@@ -5,7 +5,10 @@ namespace App\Http\Controllers\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Postingan;
+use App\Models\Mangga;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
+use Auth;
 
 class PostinganController extends Controller
 {
@@ -42,7 +45,17 @@ class PostinganController extends Controller
      */
     public function create()
     {
-        //
+        $auth = Auth::user();
+        $id_kelompok = $auth->id_kelompok;
+        $id_retailer = $auth->id_retailer;
+        if ($id_kelompok != null) {
+            $mangga = Mangga::where('id_kelompok', $id_kelompok)->get();
+        } elseif ($id_retailer != null) {
+            $mangga = Mangga::where('id_retailer', $id_retailer)->get();
+        } else {
+            $mangga = Mangga::all();
+        }
+        return view('app.postingan.create',compact('mangga'));
     }
 
     /**
@@ -53,7 +66,51 @@ class PostinganController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $v = Validator::make($request->all(),[
+            'id_mangga' => 'required',
+            'keterangan' => 'required',
+        ]);
+
+        if ($v->fails()) {
+            // dd($v->errors($v)->all());
+            return back()->withErrors($v)->withInput();
+        } else {
+            $mangga = Mangga::where('id',$request->id_mangga)->first();
+
+            if($mangga->id_retailer != null) {
+                $postingan = Postingan::count();
+                $date = date("Ymd");
+                $kode = sprintf("POR".$date."%'.04d", $postingan+1);
+                // dd($kode);
+                $create = Postingan::create([
+                    'kode_postingan' => $kode,
+                    'id_mangga' => $request->id_mangga,
+                    'id_retailer' => $mangga->id_retailer,
+                    'keterangan' => $request->keterangan
+                ]);
+            } elseif ($mangga->id_kelompok != null) {
+                $postingan = Postingan::count();
+                $date = date("Ymd");
+                $kode = sprintf("POK".$date."%'.04d", $postingan+1);
+                // dd($kode);
+                $create = Postingan::create([
+                    'kode_postingan' => $kode,
+                    'id_mangga' => $request->id_mangga,
+                    'id_kelompok' => $mangga->id_kelompok,
+                    'keterangan' => $request->keterangan
+                ]);
+            }
+
+            if ($create = true) {
+                return redirect('v1/postingan')->with('success',  __('Create Data Berhasil.'));
+            } else {
+                return redirect('v1/postingan')->with('failed',  __('Create Data Gagal.'));
+            }
+        }
+
+
+        
     }
 
     /**
@@ -78,7 +135,18 @@ class PostinganController extends Controller
      */
     public function edit($id)
     {
-        //
+        $auth = Auth::user();
+        $id_kelompok = $auth->id_kelompok;
+        $id_retailer = $auth->id_retailer;
+        if ($id_kelompok != null) {
+            $mangga = Mangga::where('id_kelompok', $id_kelompok)->get();
+        } elseif ($id_retailer != null) {
+            $mangga = Mangga::where('id_retailer', $id_retailer)->get();
+        } else {
+            $mangga = Mangga::all();
+        }
+        $data = Postingan::find($id);
+        return view('app.postingan.edit',compact('mangga','data'));
     }
 
     /**
@@ -90,7 +158,39 @@ class PostinganController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $v = Validator::make($request->all(),[
+            'id_mangga' => 'required',
+            'keterangan' => 'required',
+        ]);
+
+        if ($v->fails()) {
+            // dd($v->errors($v)->all());
+            return back()->withErrors($v)->withInput();
+        } else {
+            $mangga = Mangga::where('id',$request->id_mangga)->first();
+            $postingan = Postingan::where('id',$id);
+            if($mangga->id_retailer != null) {
+                // dd($kode);
+                $update = $postingan->update([
+                    'id_mangga' => $request->id_mangga,
+                    'id_retailer' => $mangga->id_retailer,
+                    'keterangan' => $request->keterangan
+                ]);
+            } elseif ($mangga->id_kelompok != null) {
+                // dd($kode);
+                $update = $postingan->update([
+                    'id_mangga' => $request->id_mangga,
+                    'id_kelompok' => $mangga->id_kelompok,
+                    'keterangan' => $request->keterangan
+                ]);
+            }
+
+            if ($update = true) {
+                return redirect('v1/postingan')->with('success',  __('Update Data Berhasil.'));
+            } else {
+                return redirect('v1/postingan')->with('failed',  __('Update Data Gagal.'));
+            }
+        }
     }
 
     /**
