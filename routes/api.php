@@ -29,4 +29,6 @@ Route::group(['prefix'=>'v1','namespace'=>'v1'], function(){
 	Route::get('getPostingan/{id}','PostinganController@show');
 	Route::get('getPemesanan/{id}','PemesananController@show');
 	Route::get('getPenawaran/{id}','PenawaranController@show');
+	Route::get('getPemesan/{id}','PemesananController@getPemesan');
+	Route::get('getManggaPenawaran/{id}','PenawaranController@getManggaPenawaran');
 });

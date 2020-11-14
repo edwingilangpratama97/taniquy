@@ -9,7 +9,7 @@
                 <li class="sidebar-item
                     {{ Request::is('v1/dashboard*') ? 'active' : false }}
                 ">
-                    <a href="index.html" class='sidebar-link'>
+                    <a href="{{route('dashboard')}}" class='sidebar-link'>
                         <i data-feather="home" width="20"></i>
                         <span>Dashboard</span>
                     </a>

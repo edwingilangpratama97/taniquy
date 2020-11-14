@@ -180,6 +180,7 @@ function getPostingan(id){
           $("#stok").text(json.data.mangga.stok);
           $("#jenis").text(json.data.mangga.jenis.nama);
           $("#grade").text(json.data.mangga.grade.nama);
+          $("#keterangan").text(json.data.keterangan);
           if (json.data.foto == null) {
               $("#foto").text('- Tidak Ada Foto Mangga -');
           }else{
