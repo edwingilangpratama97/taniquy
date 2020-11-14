@@ -44,5 +44,6 @@ Route::group(['prefix'=>'v1','namespace'=>'v1','middleware'=>'auth'], function()
 	Route::resource('pemesanan','PemesananController');
 	Route::resource('kebutuhan','KebutuhanController');
 	Route::resource('penawaran','PenawaranController');
+	Route::resource('setApp','SetAppController');
 });
 
