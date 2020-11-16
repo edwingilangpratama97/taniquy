@@ -7,6 +7,25 @@
 </div>
 <section class="section">
     <div class="row mb-2">
+        <div class="col-12">
+            @if (session()->has('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i data-feather="check-circle"></i>
+                {{ session()->get('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @elseif (session()->has('failed'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i data-feather="alert-circle"></i>
+                {{ session()->get('failed') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @endif
+        </div>
         <div class="col-12 col-md-3">
             <div class="card card-statistic success-before">
                 <div class="card-body p-0">

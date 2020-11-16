@@ -68,6 +68,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        // dd($data);
         if ($data['role'] == 'enduser') {
             $enduser = Enduser::count();
             $date = date("Ymd");
@@ -81,6 +82,7 @@ class RegisterController extends Controller
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'id_enduser' => $create->id,
+                'role' => $data['role'],
                 'password' => Hash::make($data['password']),
             ]);
         } elseif ($data['role'] == 'retailer') {
@@ -96,6 +98,7 @@ class RegisterController extends Controller
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'id_retailer' => $create->id,
+                'role' => $data['role'],
                 'password' => Hash::make($data['password']),
             ]);
         } elseif ($data['role'] == 'kelompok') {
@@ -111,6 +114,7 @@ class RegisterController extends Controller
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'id_kelompok' => $create->id,
+                'role' => $data['role'],
                 'password' => Hash::make($data['password']),
             ]);
         } 
