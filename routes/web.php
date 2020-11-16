@@ -22,6 +22,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix'=>'v1','namespace'=>'v1','middleware'=>'auth'], function(){
     Route::get('/dashboard','DashboardController@index')->name('dashboard');
+    Route::put('completeAccount/{id}','DashboardController@completeAccount')->name('completeAccount');
     Route::get('account','AuthController@account')->name('account');
     Route::get('updateAkunRetailer','AuthController@updateAccountRetailer')->name('updateAkunRetailer');
     Route::get('updateAkunKelompok','AuthController@updateAccountKelompok')->name('updateAkunKelompok');
