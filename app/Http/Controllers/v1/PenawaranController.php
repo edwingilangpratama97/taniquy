@@ -113,6 +113,10 @@ class PenawaranController extends Controller
                     'id_retailer' => $request->penjual,
                     'id_mangga' => $request->id_mangga
                 ]);
+                Notification::create([
+                    'id_pemesanan' => $create->id,
+                    'waktu' => \Carbon\Carbon::now(),
+                ]);
             } elseif ($request->role == 'kelompok') {
                 $penawaran = Penawaran::count();
                 $date = date("Ymd");
@@ -123,6 +127,10 @@ class PenawaranController extends Controller
                     'id_kebutuhan' => $request->id_kebutuhan,
                     'id_kelompok' => $request->penjual,
                     'id_mangga' => $request->id_mangga
+                ]);
+                Notification::create([
+                    'id_pemesanan' => $create->id,
+                    'waktu' => \Carbon\Carbon::now(),
                 ]);
             }
 
@@ -156,9 +164,9 @@ class PenawaranController extends Controller
      */
     public function edit($id)
     {
-        $data = Penawaran::find($id);  
+        $data = Penawaran::find($id);
         if($data->id_kelompok != null ){
-            $mangga = Mangga::where('id_kelompok', $data->id_kelompok)->get();     
+            $mangga = Mangga::where('id_kelompok', $data->id_kelompok)->get();
         } elseif ($data->id_retailer != null) {
             $mangga = Mangga::where('id_retailer', $data->id_retailer)->get();
         }
@@ -176,7 +184,7 @@ class PenawaranController extends Controller
     public function update(Request $request, $id)
     {
         $penawaran = Penawaran::find($id);
-        
+
         $v = Validator::make($request->all(),[
             'id_mangga' => 'required',
             'status_pembayaran' => 'required',
@@ -194,7 +202,7 @@ class PenawaranController extends Controller
             } else {
                 return redirect('v1/penawaran')->with('failed',  __('Update Data Gagal.'));
             }
-        }    
+        }
     }
 
     /**

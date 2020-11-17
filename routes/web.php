@@ -34,6 +34,7 @@ Route::group(['prefix'=>'v1','namespace'=>'v1','middleware'=>'auth'], function()
     Route::get('updatePassword','AuthController@updatePassword')->name('updatePassword');
     Route::put('updatePassword/{id}','AuthController@actionUpdatePassword')->name('actionUpdatePassword');
     Route::get('notif','NotifController@notif')->name('notif');
+    Route::post('clickNotif','NotifController@clickNotif')->name('clickNotifikasi');
 
 	Route::resource('kelompok','KelompokTaniController');
 	Route::resource('retailer','RetailerController');
