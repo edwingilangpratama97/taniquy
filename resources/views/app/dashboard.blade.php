@@ -356,7 +356,7 @@
                     </div>
                 `);
             } else {
-                postingan.forEach(element => 
+                postingan.forEach(element =>
                     $('#result-relevan').append(`
                         <div class="row">
                         <div class="col-6">
@@ -394,7 +394,7 @@
                             <span class="float-right">
                                 ${element.mangga.stok} Kg
                             </span>
-                        </div>  
+                        </div>
                         <div class="col-12 mt-2">
                             <a href="#" class="float-right">
                                 <button type="button" class="btn btn-success">Pesan</button>
@@ -541,7 +541,7 @@
 
     L.control.layers(baseLayers).addTo(map);
     // L.marker([-1.605328, 117.451067]).addTo(map);
-    
+
 </script>
 
 @endpush

@@ -28,4 +28,8 @@ class Penawaran extends Model
     {
     	return $this->belongsTo('App\Models\Retailer','id_retailer');
     }
+    public function penawaran()
+    {
+        return $this->hasOne('App\Models\Notification','id_penawaran');
+    }
 }

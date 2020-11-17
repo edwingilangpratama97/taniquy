@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Pemesanan;
 use App\Models\Retailer;
 use App\Models\Enduser;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Validator;
 use Auth;
 use App\Models\Postingan;
@@ -119,6 +120,10 @@ class PemesananController extends Controller
                     'id_retailer' => $request->pemesan,
                     'jumlah' => $request->jumlah
                 ]);
+                Notification::create([
+                    'id_pemesanan' => $create->id,
+                    'waktu' => \Carbon\Carbon::now(),
+                ]);
             } elseif ($request->role == 'enduser') {
                 $pemesanan = Pemesanan::count();
                 $date = date("Ymd");
@@ -129,6 +134,10 @@ class PemesananController extends Controller
                     'id_postingan' => $request->id_postingan,
                     'id_enduser' => $request->pemesan,
                     'jumlah' => $request->jumlah
+                ]);
+                Notification::create([
+                    'id_pemesanan' => $create->id,
+                    'waktu' => \Carbon\Carbon::now(),
                 ]);
             }
 
