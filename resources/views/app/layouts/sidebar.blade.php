@@ -123,6 +123,37 @@
                     </a>
                 </li>
                 @endif
+                <li class="sidebar-item has-sub
+                    {{ Request::is('v1/laporanPemesanan*') ? 'active' : false }}
+                    {{ Request::is('v1/laporanPenawaran*') ? 'active' : false }}
+                    {{ Request::is('v1/laporanPostingan*') ? 'active' : false }}
+                    {{ Request::is('v1/laporanKebutuhan*') ? 'active' : false }}
+                    ">
+                    <a href="#" class='sidebar-link'>
+                        <i data-feather="database" width="20"></i>
+                        <span>Laporan</span>
+                    </a>
+                    <ul class="submenu
+                    {{ Request::is('v1/laporanPemesanan*') ? 'active' : false }}
+                    {{ Request::is('v1/laporanPenawaran*') ? 'active' : false }}
+                    {{ Request::is('v1/laporanPostingan*') ? 'active' : false }}
+                    {{ Request::is('v1/laporanKebutuhan*') ? 'active' : false }}
+                    ">
+                        <li>
+                            <a href="{{route('laporan.pemesanan')}}">Pemesanan</a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('laporan.penawaran')}}">Penawaran</a>
+                        </li>
+                        <li>
+                            <a href="{{route('laporan.postingan')}}">Postingan</a>
+                        </li>
+                        <li>
+                            <a href="{{route('laporan.kebutuhan')}}">Kebutuhan</a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="sidebar-item">
                     <a href="{{route('setApp.index')}}" class='sidebar-link'>
                         <i data-feather="settings" width="20"></i>
