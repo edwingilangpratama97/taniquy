@@ -4,9 +4,13 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\JenisMangga;
+use App\Models\Mangga;
+use App\Models\Postingan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use App\User;
+use Auth;
 
 class JenisManggaController extends Controller
 {
@@ -30,6 +34,41 @@ class JenisManggaController extends Controller
         // dd($count);
 
         return view('app.jenisMangga.index');
+    }
+
+    public function getByJenis(Request $request, $id)
+    {
+        $user_id = $request->user;
+        $auth = User::find($user_id);
+        if($auth->role == 'retailer'){
+            $mangga = Mangga::where('id_jenis',$id)->get();
+            $data = [];
+            foreach ($mangga as $m) {
+                // $data[] = $p;
+                $postingan = Postingan::with('mangga.jenis')->where('id_kelompok','!=',null)->where('id_mangga',$m->id)->get();
+                foreach ($postingan as $p) {
+                    $data[] = $p;
+                }
+            }
+            return response()->json([
+                'status' => 'Success Loaded',
+                'data' => $data
+            ]);
+        }elseif ($auth->role == 'enduser') {
+            $mangga = Mangga::where('id_jenis',$id)->get();
+            $data = [];
+            foreach ($mangga as $m) {
+                // $data[] = $p;
+                $postingan = Postingan::with('mangga.jenis')->where('id_retailer','!=',null)->where('id_mangga',$m->id)->get();
+                foreach ($postingan as $p) {
+                    $data[] = $p;
+                }
+            }
+            return response()->json([
+                'status' => 'Success Loaded',
+                'data' => $data
+            ]);
+        }
     }
 
     /**
