@@ -73,7 +73,7 @@ class KelompokTaniController extends Controller
             // dd($request->all());
             $kelompok = KelompokTani::count();
             $date = date("Ymd");
-            $kode = sprintf("KT".$date."%'.04d\n", $kelompok+1);
+            $kode = sprintf("KT".$date."%'.04d", $kelompok+1);
 
             if ($request->file('foto_ketua')) {
                 $name = $request->file('foto_ketua');

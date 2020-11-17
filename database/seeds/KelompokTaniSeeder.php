@@ -14,7 +14,7 @@ class KelompokTaniSeeder extends Seeder
     {
     	$kelompok = KelompokTani::count();
     	$date = date("Ymd");
-    	$kode = sprintf("KT".$date."%'.04d\n", $kelompok+1);
+    	$kode = sprintf("KT".$date."%'.04d", $kelompok+1);
 		KelompokTani::create([
 			'kode_kelompok' => $kode,
 			'id_desa' => 1101010001,

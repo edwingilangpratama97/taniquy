@@ -14,7 +14,7 @@ class RetailerSeeder extends Seeder
     {
 		$retailer = Retailer::count();
     	$date = date("Ymd");
-    	$kode = sprintf("RT".$date."%'.04d\n", $retailer+1);
+    	$kode = sprintf("RT".$date."%'.04d", $retailer+1);
 		Retailer::create([
 			'kode_retailer' => $kode,
 			'id_desa' => 1101010001,

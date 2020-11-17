@@ -14,7 +14,7 @@ class KebutuhanSeeder extends Seeder
     {
     	$kebutuhan = Kebutuhan::count();
     	$date = date("Ymd");
-    	$kode = sprintf("KE".$date."%'.04d\n", $kebutuhan+1);
+    	$kode = sprintf("KE".$date."%'.04d", $kebutuhan+1);
         Kebutuhan::create([
         	'kode_kebutuhan' => $kode,
         	'id_enduser' => 1,
@@ -25,7 +25,7 @@ class KebutuhanSeeder extends Seeder
 
         $kebutuhan = Kebutuhan::count();
     	$date = date("Ymd");
-    	$kode = sprintf("KR".$date."%'.04d\n", $kebutuhan+1);
+    	$kode = sprintf("KR".$date."%'.04d", $kebutuhan+1);
         Kebutuhan::create([
         	'kode_kebutuhan' => $kode,
         	'id_retailer' => 1,

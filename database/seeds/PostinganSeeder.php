@@ -14,7 +14,7 @@ class PostinganSeeder extends Seeder
     {
     	$postingan = Postingan::count();
     	$date = date("Ymd");
-    	$kode = sprintf("POK".$date."%'.04d\n", $postingan+1);
+    	$kode = sprintf("POK".$date."%'.04d", $postingan+1);
         Postingan::create([
         	'kode_postingan' => $kode,
         	'id_mangga' => 1,
@@ -25,7 +25,7 @@ class PostinganSeeder extends Seeder
 
         $postingan = Postingan::count();
     	$date = date("Ymd");
-    	$kode = sprintf("POR".$date."%'.04d\n", $postingan+1);
+    	$kode = sprintf("POR".$date."%'.04d", $postingan+1);
         Postingan::create([
         	'kode_postingan' => $kode,
         	'id_mangga' => 2,

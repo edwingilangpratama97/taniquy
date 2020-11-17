@@ -14,7 +14,7 @@ class PenawaranSeeder extends Seeder
     {
         $penawaran = Penawaran::count();
     	$date = date("Ymd");
-    	$kode = sprintf("PNR".$date."%'.04d\n", $penawaran+1);
+    	$kode = sprintf("PNR".$date."%'.04d", $penawaran+1);
     	Penawaran::create([
     		'kode_penawaran' => $kode,
     		'id_kebutuhan' => 1,
@@ -25,7 +25,7 @@ class PenawaranSeeder extends Seeder
 
     	$penawaran = Penawaran::count();
     	$date = date("Ymd");
-    	$kode = sprintf("PNK".$date."%'.04d\n", $penawaran+1);
+    	$kode = sprintf("PNK".$date."%'.04d", $penawaran+1);
     	Penawaran::create([
     		'kode_penawaran' => $kode,
     		'id_kebutuhan' => 2,

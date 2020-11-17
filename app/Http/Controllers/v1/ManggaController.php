@@ -76,8 +76,8 @@ class ManggaController extends Controller
         } else {
             $mangga = Mangga::count();
             $date = date("Ymd");
-            $kodeKel = sprintf("MK".$date."%'.04d\n", $mangga+1);
-            $kodeRet = sprintf("MR".$date."%'.04d\n", $mangga+1);
+            $kodeKel = sprintf("MK".$date."%'.04d", $mangga+1);
+            $kodeRet = sprintf("MR".$date."%'.04d", $mangga+1);
 
             $name = $request->file('foto');
             $foto = time()."_".$name->getClientOriginalName();
@@ -176,8 +176,8 @@ class ManggaController extends Controller
         } else {
             $mangga = Mangga::count();
             $date = date("Ymd");
-            $kodeKel = sprintf("MK".$date."%'.04d\n", $mangga+1);
-            $kodeRet = sprintf("MR".$date."%'.04d\n", $mangga+1);
+            $kodeKel = sprintf("MK".$date."%'.04d", $mangga+1);
+            $kodeRet = sprintf("MR".$date."%'.04d", $mangga+1);
 
             $user = Auth::user();
             $mangga = Mangga::find($id);

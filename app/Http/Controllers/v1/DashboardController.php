@@ -28,10 +28,10 @@ class DashboardController extends Controller
         $provinsi = Provinsi::all();
         $jenis = JenisMangga::all();
         $auth = Auth::user();
-        $postinganKelompok = Postingan::with('kelompok')->where('id_kelompok','!=',null)->get();
-        $postinganRetailer = Postingan::with('retailer')->where('id_retailer','!=',null)->get();
-        $kebutuhanRetailer = Kebutuhan::with('retailer')->where('id_retailer','!=',null)->get();
-        $kebutuhanEnduser = Kebutuhan::with('enduser')->where('id_enduser','!=',null)->get();
+        $postinganKelompok = Postingan::with('kelompok.desa.kecamatan','mangga.jenis')->where('id_kelompok','!=',null)->get();
+        $postinganRetailer = Postingan::with('retailer.desa.kecamatan','mangga.jenis')->where('id_retailer','!=',null)->get();
+        $kebutuhanRetailer = Kebutuhan::with('retailer.desa.kecamatan','jenis')->where('id_retailer','!=',null)->get();
+        $kebutuhanEnduser = Kebutuhan::with('enduser.desa.kecamatan','jenis')->where('id_enduser','!=',null)->get();
         if ($auth->id_kelompok != null) {
             $mangga = Mangga::where('id_kelompok', Auth::user()->id_kelompok)->get();
             if($auth->kelompok->kontak == null || $auth->kelompok->latitude == null || $auth->kelompok->longitude == null){
