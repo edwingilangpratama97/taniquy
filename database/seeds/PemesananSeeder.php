@@ -14,7 +14,7 @@ class PemesananSeeder extends Seeder
     {
     	$pemesanan = Pemesanan::count();
     	$date = date("Ymd");
-    	$kode = sprintf("PEE".$date."%'.04d\n", $pemesanan+1);
+    	$kode = sprintf("PEE".$date."%'.04d", $pemesanan+1);
         Pemesanan::create([
         	'kode_pemesanan' => $kode,
         	'id_postingan' => 2,
@@ -25,7 +25,7 @@ class PemesananSeeder extends Seeder
 
         $pemesanan = Pemesanan::count();
     	$date = date("Ymd");
-    	$kode = sprintf("PER".$date."%'.04d\n", $pemesanan+1);
+    	$kode = sprintf("PER".$date."%'.04d", $pemesanan+1);
         Pemesanan::create([
         	'kode_pemesanan' => $kode,
         	'id_postingan' => 1,

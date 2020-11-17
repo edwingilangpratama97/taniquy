@@ -470,13 +470,14 @@
     // var latitude = -1.205328
     // var longitude = 113.451067
     @if(Auth::user()->role == 'kelompok')
-    var kebutuhanRetailer = `{{$kebutuhanRetailer}}`
+    var kebutuhanRetailer = `{{$kebutuhanRetailer->toJson()}}`
     @elseif(Auth::user()->role == 'retailer')
-    var postinganKelompok = JSON.parse("{{json_encode($postinganKelompok)}}");
+    var postinganKelompok = $postinganKelompok
+    console.log(postinganKelompok)
     var kebutuhanEnduser = `{{$kebutuhanEnduser}}`
-    for (var i = 0; i < postinganKelompok.length; i++) {
-        console.log(postinganKelompok)
-    }
+    // for (var i = 0; i < postinganKelompok.length; i++) {
+    //     console.log(postinganKelompok)
+    // }
     // postinganKelompok.forEach(element => console.log(element))
     function postinganKelompokMarker(data, index) {
         var isiGreen = `

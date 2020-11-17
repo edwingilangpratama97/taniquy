@@ -14,7 +14,7 @@ class EnduserSeeder extends Seeder
     {
 		$enduser = Enduser::count();
     	$date = date("Ymd");
-    	$kode = sprintf("EU".$date."%'.04d\n", $enduser+1);
+    	$kode = sprintf("EU".$date."%'.04d", $enduser+1);
 		Enduser::create([
 			'kode_enduser' => $kode,
 			'id_desa' => 1101010001,

@@ -70,7 +70,7 @@ class RetailerController extends Controller
         } else {
             $retailer = Retailer::count();
             $date = date("Ymd");
-            $kode = sprintf("RT".$date."%'.04d\n", $retailer+1);
+            $kode = sprintf("RT".$date."%'.04d", $retailer+1);
 
             if ($request->file()) {
                 $name = $request->file('foto');

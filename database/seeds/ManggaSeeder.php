@@ -14,7 +14,7 @@ class ManggaSeeder extends Seeder
     {
     	$mangga = Mangga::count();
     	$date = date("Ymd");
-    	$kode = sprintf("MK".$date."%'.04d\n", $mangga+1);
+    	$kode = sprintf("MK".$date."%'.04d", $mangga+1);
         Mangga::create([
         	'id_kelompok' => 1,
         	'id_jenis' => 1,
@@ -27,7 +27,7 @@ class ManggaSeeder extends Seeder
 
         $mangga = Mangga::count();
     	$date = date("Ymd");
-    	$kode = sprintf("MR".$date."%'.04d\n", $mangga+1);
+    	$kode = sprintf("MR".$date."%'.04d", $mangga+1);
         Mangga::create([
         	'id_retailer' => 1,
         	'id_jenis' => 1,
