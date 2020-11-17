@@ -2,11 +2,29 @@
 
 @section('content')
 <div class="page-title">
-    <h3>Dashboard</h3>
     <p class="text-subtitle text-muted">Data Statistik Penjualan Mangga</p>
 </div>
 <section class="section">
     <div class="row mb-2">
+        <div class="col-12">
+            @if (session()->has('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i data-feather="check-circle"></i>
+                {{ session()->get('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @elseif (session()->has('failed'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i data-feather="alert-circle"></i>
+                {{ session()->get('failed') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @endif
+        </div>
         <div class="col-12 col-md-3">
             <div class="card card-statistic success-before">
                 <div class="card-body p-0">
@@ -65,7 +83,7 @@
                         <div class='px-3 py-3 d-flex justify-content-between'>
                             <h3 class='card-title'>Sales Today</h3>
                             <div class="card-right d-flex align-items-center">
-                                <p>423 </p>
+                                <p>500 </p>
                             </div>
                         </div>
                         {{-- <div class="chart-wrapper">
@@ -76,206 +94,330 @@
             </div>
         </div>
     </div>
-    <div class="row mb-4 hidden">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class='card-heading p-1 pl-3'>Sales</h3>
+    <div id='map'></div>
+    <div class="float-right floating-group">
+        @if(Auth::user()->role == 'kelompok')
+        <div class="floating-postingan my-2" id="floating-postingan">
+            <div class="row w-float">
+                <div class="col-8 inline align-self-center">
+                    <div class="card h-100 align-self-center">
+                        <span class="floating-comment">Post Mangga</span>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="col-4 py-2">
+                    <button class="btn btn-warning btn-circle shadow" data-toggle="modal" data-target="#postingan">
+                        <div class="d-flex justify-content-center">
+                            <span class="plus-text text-center">
+                                +
+                            </span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        @elseif(Auth::user()->role == 'enduser')
+        <div class="floating-kebutuhan my-2" id="floating-kebuthan">
+            <div class="row w-float">
+                <div class="col-8 inline align-self-center">
+                    <div class="card h-100 align-self-center">
+                        <span class="floating-comment">Post Kebutuhan</span>
+                        <div class="triangle-right"></div>
+                    </div>
+                </div>
+                <div class="col-4 py-2">
+                    <button class="btn btn-success btn-circle shadow" data-toggle="modal" data-target="#kebutuhan">
+                        <div class="d-flex justify-content-center">
+                            <span class="plus-text text-center">
+                                +
+                            </span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        @elseif(Auth::user()->role == 'retailer')
+        <div class="floating-postingan my-2" id="floating-postingan">
+            <div class="row w-float">
+                <div class="col-8 inline align-self-center">
+                    <div class="card h-100 align-self-center">
+                        <span class="floating-comment">Post Mangga</span>
+                    </div>
+                </div>
+                <div class="col-4 py-2">
+                    <button class="btn btn-warning btn-circle shadow" data-toggle="modal" data-target="#postingan">
+                        <div class="d-flex justify-content-center">
+                            <span class="plus-text text-center">
+                                +
+                            </span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="floating-kebutuhan my-2" id="floating-kebuthan">
+            <div class="row w-float">
+                <div class="col-8 inline align-self-center">
+                    <div class="card h-100 align-self-center">
+                        <span class="floating-comment">Post Kebutuhan</span>
+                    </div>
+                </div>
+                <div class="col-4 py-2">
+                    <button class="btn btn-success btn-circle shadow" data-toggle="modal" data-target="#kebutuhan">
+                        <div class="d-flex justify-content-center">
+                            <span class="plus-text text-center">
+                                +
+                            </span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        @endif
+    </div>
+</section>
+<div class="modal fade text-left" id="kebutuhan" tabindex="0" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+        <div class="modal-header bg-success">
+        <h5 class="modal-title white" id="myModalLabel110">Posting Kebutuhan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <i data-feather="x"></i>
+        </button>
+        </div>
+        <form action="{{route('kebutuhan.store')}}" method="post">
+        @csrf
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-6">
                     <div class="row">
-                        <div class="col-md-4 col-12">
-                            <div class="pl-3">
-                                <h1 class='mt-5'>$21,102</h1>
-                                <p class='text-xs'><span class="text-green"><i data-feather="bar-chart" width="15"></i> +19%</span> than last month</p>
-                                <div class="legends">
-                                    <div class="legend d-flex flex-row align-items-center">
-                                        <div class='w-3 h-3 rounded-full bg-info mr-2'></div><span class='text-xs'>Last Month</span>
-                                    </div>
-                                    <div class="legend d-flex flex-row align-items-center">
-                                        <div class='w-3 h-3 rounded-full bg-blue mr-2'></div><span class='text-xs'>Current Month</span>
-                                    </div>
+                        <div class="col-12">
+                            @if(Auth::user()->role == 'retailer')
+                            <input type="hidden" name="pemesan" value="{{Auth::user()->id_retailer}}">
+                            @elseif(Auth::user()->role == 'enduser')
+                            <input type="hidden" name="pemesan" value="{{Auth::user()->id_enduser}}">
+                            @endif
+                            <input type="hidden" name="role" value="{{Auth::user()->role}}">
+                            <div class="form-group">
+                                <label for="jenis-select">Jenis Mangga</label>
+                                <select id="jenis-select" class="form-select @error('id_jenis') is-invalid @enderror" id="jenis-select" name="id_jenis">
+                                    <option value="">-- Pilih Disini --</option>
+                                    @foreach($jenis as $p)
+                                    <option value="{{$p->id}}">{{$p->nama}}</option>
+                                    @endforeach
+                                </select>
+                                @error('id_jenis')
+                                <div class="invalid-feedback">
+                                    <i class="bx bx-radio-circle"></i>
+                                    {{{$message}}}
                                 </div>
+                                @enderror
                             </div>
                         </div>
-                        <div class="col-md-8 col-12">
-                            <canvas id="bar"></canvas>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="jumlah" class="form-label">Jumlah</label>
+                                <input id="jumlah" type="text" name="jumlah" class="form-control @error('jumlah') is-invalid @enderror">
+                                @error('jumlah')
+                                <div class="invalid-feedback">
+                                    <i class="bx bx-radio-circle"></i>
+                                    {{{$message}}}
+                                </div>
+                                @enderror
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title">Orders Today</h4>
-                    <div class="d-flex ">
-                        <i data-feather="download"></i>
-                    </div>
-                </div>
-                <div class="card-body px-0 pb-0">
-                    <div class="table-responsive">
-                        <table class='table mb-0' id="table1">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>City</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Graiden</td>
-                                    <td>vehicula.aliquet@semconsequat.co.uk</td>
-                                    <td>076 4820 8838</td>
-                                    <td>Offenburg</td>
-                                    <td>
-                                        <span class="badge bg-success">Active</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Dale</td>
-                                    <td>fringilla.euismod.enim@quam.ca</td>
-                                    <td>0500 527693</td>
-                                    <td>New Quay</td>
-                                    <td>
-                                        <span class="badge bg-success">Active</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Nathaniel</td>
-                                    <td>mi.Duis@diam.edu</td>
-                                    <td>(012165) 76278</td>
-                                    <td>Grumo Appula</td>
-                                    <td>
-                                        <span class="badge bg-danger">Inactive</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Darius</td>
-                                    <td>velit@nec.com</td>
-                                    <td>0309 690 7871</td>
-                                    <td>Ways</td>
-                                    <td>
-                                        <span class="badge bg-success">Active</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Ganteng</td>
-                                    <td>velit@nec.com</td>
-                                    <td>0309 690 7871</td>
-                                    <td>Ways</td>
-                                    <td>
-                                        <span class="badge bg-success">Active</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Oleg</td>
-                                    <td>rhoncus.id@Aliquamauctorvelit.net</td>
-                                    <td>0500 441046</td>
-                                    <td>Rossignol</td>
-                                    <td>
-                                        <span class="badge bg-success">Active</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Kermit</td>
-                                    <td>diam.Sed.diam@anteVivamusnon.org</td>
-                                    <td>(01653) 27844</td>
-                                    <td>Patna</td>
-                                    <td>
-                                        <span class="badge bg-success">Active</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="col-6">
+                    <span>Saran Postingan Berdasarkan Kebutuhan Anda :</span>
+                    <hr>
+                    {{-- <div class="row"> --}}
+                        <div id="result-relevan"></div>
+                    {{-- </div> --}}
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card ">
-                <div class="card-header">
-                    <h4>Your Earnings</h4>
-                </div>
-                <div class="card-body">
-                    <div id="radialBars"></div>
-                    <div class="text-center mb-5">
-                        <h6>From last month</h6>
-                        <h1 class='text-green'>+$2,134</h1>
-                    </div>
-                </div>
-            </div>
-            <div class="card widget-todo">
-                <div class="card-header border-bottom d-flex justify-content-between align-items-center">
-                    <h4 class="card-title d-flex">
-                        <i class='bx bx-check font-medium-5 pl-25 pr-75'></i>Progress
-                    </h4>
-            
-                </div>
-                <div class="card-body px-0 py-1">
-                    <table class='table table-borderless'>
-                        <tr>
-                            <td class='col-3'>UI Design</td>
-                            <td class='col-6'>
-                                <div class="progress progress-info">
-                                    <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="0"
-                                        aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </td>
-                            <td class='col-3 text-center'>60%</td>
-                        </tr>
-                        <tr>
-                            <td class='col-3'>VueJS</td>
-                            <td class='col-6'>
-                                <div class="progress progress-success">
-                                    <div class="progress-bar" role="progressbar" style="width: 35%" aria-valuenow="0"
-                                        aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </td>
-                            <td class='col-3 text-center'>30%</td>
-                        </tr>
-                        <tr>
-                            <td class='col-3'>Laravel</td>
-                            <td class='col-6'>
-                                <div class="progress progress-danger">
-                                    <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="0"
-                                        aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </td>
-                            <td class='col-3 text-center'>50%</td>
-                        </tr>
-                        <tr>
-                            <td class='col-3'>ReactJS</td>
-                            <td class='col-6'>
-                                <div class="progress progress-primary">
-                                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="0"
-                                        aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </td>
-                            <td class='col-3 text-center'>80%</td>
-                        </tr>
-                        <tr>
-                            <td class='col-3'>Go</td>
-                            <td class='col-6'>
-                                <div class="progress progress-secondary">
-                                    <div class="progress-bar" role="progressbar" style="width: 65%" aria-valuenow="0"
-                                        aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </td>
-                            <td class='col-3 text-center'>65%</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+            <i class="bx bx-x d-block d-sm-none"></i>
+            <span class="d-none d-sm-block">Close</span>
+        </button>
+
+        <button type="submit" class="btn btn-success ml-1">
+            <i class="bx bx-check d-block d-sm-none"></i>
+            <span class="d-none d-sm-block"><i data-feather="send"></i> Post</span>
+        </button>
+        </form>
         </div>
     </div>
-    <div id='map'></div>
+    </div>
+</div>
+<div class="modal fade text-left" id="postingan" tabindex="0" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+        <div class="modal-header bg-warning">
+        <h5 class="modal-title white" id="myModalLabel110">Posting/Jual Mangga</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <i data-feather="x"></i>
+        </button>
+        </div>
+        <form action="{{route('postingan.store')}}" method="post">
+        @csrf
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12">
+                    @if(Auth::user()->role == 'retailer')
+                    <input type="hidden" name="penjual" value="{{Auth::user()->id_retailer}}">
+                    @elseif(Auth::user()->role == 'kelompok')
+                    <input type="hidden" name="penjual" value="{{Auth::user()->id_kelompok}}">
+                    @endif
+                    <input type="hidden" name="role" value="{{Auth::user()->role}}">
+                    <div class="form-group">
+                        <label for="jenis-select">Mangga</label>
+                        <select id="jenis-select" class="form-select @error('id_mangga') is-invalid @enderror" id="jenis-select" name="id_mangga">
+                            <option value="">-- Pilih Disini --</option>
+                            @foreach($mangga as $p)
+                            <option value="{{$p->id}}">{{$p->jenis->nama}}</option>
+                            @endforeach
+                        </select>
+                        @error('id_mangga')
+                        <div class="invalid-feedback">
+                            <i class="bx bx-radio-circle"></i>
+                            {{{$message}}}
+                        </div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="keterangan" class="form-label">Keterangan</label>
+                        <textarea id="keterangan" class="form-select @error('keterangan') is-invalid @enderror" name="keterangan" rows="6"></textarea>
+                        @error('keterangan')
+                        <div class="invalid-feedback">
+                            <i class="bx bx-radio-circle"></i>
+                            {{{$message}}}
+                        </div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+            <i class="bx bx-x d-block d-sm-none"></i>
+            <span class="d-none d-sm-block">Close</span>
+        </button>
 
-</section>
+        <button type="submit" class="btn btn-warning ml-1">
+            <i class="bx bx-check d-block d-sm-none"></i>
+            <span class="d-none d-sm-block"><i data-feather="send"></i> Post</span>
+        </button>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
 @endsection
 @push('script')
 <script>
+    $('#jenis-select').change(function() {
+        var valueJenis = $('#jenis-select').val();
+        console.log('Jenis ID : '+valueJenis);
+        getByJenis(valueJenis,{{Auth::user()->id}});
+    });
+
+    function getByJenis(id,user_id) {
+        $('#result-relevan').html(`
+            <div class="d-flex justify-content-center my-4">
+                <div class="spinner-grow text-success" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <div class="spinner-grow text-success" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <div class="spinner-grow text-success" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        `);
+        $.ajax({
+          url: '/api/v1/getByJenis/'+id,
+          type: 'GET',
+          data: {user:user_id},
+          cache: false,
+          dataType: 'json',
+          success: function(json) {
+            // alert(json.data);
+            $('#result-relevan').html('');
+            var postingan = json.data;
+            if(postingan.length < 1){
+                $('#result-relevan').html(`
+                    <div class="d-flex justify-content-center my-4">
+                        <h6 classs="text-center">~ Tidak Ada Postingan Yang Relevan ~</h6>
+                    </div>
+                `);
+            } else {
+                postingan.forEach(element => 
+                    $('#result-relevan').append(`
+                        <div class="row">
+                        <div class="col-6">
+                            ID Postingan
+                        </div>
+                        <div class="col-6">
+                            <span class="float-left">:</span>
+                            <span class="float-right">
+                                ${element.kode_postingan}
+                            </span>
+                        </div>
+                        <div class="col-6">
+                            Jenis Mangga
+                        </div>
+                        <div class="col-6">
+                            <span class="float-left">:</span>
+                            <span class="float-right">
+                                ${element.mangga.jenis.nama}
+                            </span>
+                        </div>
+                        <div class="col-6">
+                            Harga
+                        </div>
+                        <div class="col-6">
+                            <span class="float-left">:</span>
+                            <span class="float-right">
+                                Rp. ${element.mangga.harga}
+                            </span>
+                        </div>
+                        <div class="col-6">
+                            Stok
+                        </div>
+                        <div class="col-6">
+                            <span class="float-left">:</span>
+                            <span class="float-right">
+                                ${element.mangga.stok} Kg
+                            </span>
+                        </div>  
+                        <div class="col-12 mt-2">
+                            <a href="#" class="float-right">
+                                <button type="button" class="btn btn-success">Pesan</button>
+                            </a>
+                        </div>
+                        </div>
+                        <hr>
+                    `)
+                );
+            }
+              // $("#kabupaten-select").html('');
+              // if (json.code == 200) {
+              //     for (i = 0; i < Object.keys(json.data).length; i++) {
+              //         // console.log(json.data[i].nama);
+              //         $('#kabupaten-select').append($('<option>').text(json.data[i].nama).attr('value', json.data[i].id));
+              //     }
+
+              // } else {
+              //     $('#kabupaten-select').append($('<option>').text('Data tidak di temukan').attr('value', 'Data tidak di temukan'));
+              // }
+          }
+        });
+    }
 
     var mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
@@ -325,37 +467,48 @@
     // var greenIcon = new LeafIcon({iconUrl: '{{asset('images/green-marker.svg')}}'}),
     //     redIcon = new LeafIcon({iconUrl: '{{asset('images/red-marker.svg')}}'});
 
-    var latitude = -1.205328
-    var longitude = 113.451067
-
-    var isiGreen = `
-        <div class="row">
-            <div class="col-12">
-                <h4>Kios Bu Yati</h4>
+    // var latitude = -1.205328
+    // var longitude = 113.451067
+    @if(Auth::user()->role == 'kelompok')
+    var kebutuhanRetailer = `{{$kebutuhanRetailer}}`
+    @elseif(Auth::user()->role == 'retailer')
+    var postinganKelompok = JSON.parse("{{json_encode($postinganKelompok)}}");
+    var kebutuhanEnduser = `{{$kebutuhanEnduser}}`
+    for (var i = 0; i < postinganKelompok.length; i++) {
+        console.log(postinganKelompok)
+    }
+    // postinganKelompok.forEach(element => console.log(element))
+    function postinganKelompokMarker(data, index) {
+        var isiGreen = `
+            <div class="row">
+                <div class="col-12">
+                    <h4>Kios Bu Yati</h4>
+                </div>
+                <div class="col-6">
+                    <span>Menjual</span>
+                </div>
+                <div class="col-6">
+                    <span class="float-left">:</span>
+                    <span class="float-right">Mangga Harumanis</span>
+                </div>
+                <div class="col-6">
+                    <span>Harga/Kg</span>
+                </div>
+                <div class="col-6">
+                    <span class="float-left">:</span>
+                    <span class="float-right">10.500</span>
+                </div>
+                <div class="col-6">
+                    <span>Stok</span>
+                </div>
+                <div class="col-6">
+                    <span class="float-left">:</span>
+                    <span class="float-right">500 Kg</span>
+                </div>
             </div>
-            <div class="col-6">
-                <span>Menjual</span>
-            </div>
-            <div class="col-6">
-                <span class="float-left">:</span>
-                <span class="float-right">Mangga Harumanis</span>
-            </div>
-            <div class="col-6">
-                <span>Harga/Kg</span>
-            </div>
-            <div class="col-6">
-                <span class="float-left">:</span>
-                <span class="float-right">10.500</span>
-            </div>
-            <div class="col-6">
-                <span>Stok</span>
-            </div>
-            <div class="col-6">
-                <span class="float-left">:</span>
-                <span class="float-right">500 Kg</span>
-            </div>
-        </div>
-    `
+        `
+        L.marker([data.kelompok.latitude, data.kelompok.longitude], {icon: greenIcon}).bindPopup(isiGreen).addTo(map)
+    }
 
     var isiRed = `
         <div class="row">
@@ -379,8 +532,11 @@
         </div>
     `
 
-    L.marker([latitude+2, longitude], {icon: greenIcon}).bindPopup(isiGreen).addTo(map);
     L.marker([latitude-5, longitude-5], {icon: redIcon}).bindPopup(isiRed).addTo(map);
+
+    @elseif(Auth::user()->role == 'enduser')
+    var postinganRetailer = `{{$potinganRetailer}}`;
+    @endif
 
     L.control.layers(baseLayers).addTo(map);
     // L.marker([-1.605328, 117.451067]).addTo(map);

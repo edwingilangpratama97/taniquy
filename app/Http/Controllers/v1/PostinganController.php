@@ -102,6 +102,10 @@ class PostinganController extends Controller
                 ]);
             }
 
+            if (Auth::user()->role != 'admin') {
+                return redirect('v1/dashboard')->with('success',  __('Post Berhasil.'));
+            }
+
             if ($create = true) {
                 return redirect('v1/postingan')->with('success',  __('Create Data Berhasil.'));
             } else {

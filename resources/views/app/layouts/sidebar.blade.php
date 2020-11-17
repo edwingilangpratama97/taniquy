@@ -14,6 +14,7 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+                @if(Auth::user()->role == 'admin')
                 <li class="sidebar-item has-sub
                     {{ Request::is('v1/kelompok*') ? 'active' : false }}
                     {{ Request::is('v1/retailer*') ? 'active' : false }}
@@ -94,7 +95,35 @@
                         </li>
                     </ul>
                 </li>
-                <li class="sidebar-item {{ Request::is('v1/setApp*') ? 'active' : false }}">
+                @elseif(Auth::user()->role == 'enduser')
+                <li class="sidebar-item
+                    {{ Request::is('v1/kebutuhan*') ? 'active' : false }}
+                ">
+                    <a href="#" class='sidebar-link'>
+                        <i data-feather="user" width="20"></i>
+                        <span>Enduser Menu</span>
+                    </a>
+                </li>
+                @elseif(Auth::user()->role == 'retailer')
+                <li class="sidebar-item
+                    {{ Request::is('v1/kebutuhan*') ? 'active' : false }}
+                ">
+                    <a href="#" class='sidebar-link'>
+                        <i data-feather="user" width="20"></i>
+                        <span>Retailer Menu</span>
+                    </a>
+                </li>
+                @elseif(Auth::user()->role == 'kelompok')
+                <li class="sidebar-item
+                    {{ Request::is('v1/kebutuhan*') ? 'active' : false }}
+                ">
+                    <a href="#" class='sidebar-link'>
+                        <i data-feather="user" width="20"></i>
+                        <span>Kelompok Menu</span>
+                    </a>
+                </li>
+                @endif
+                <li class="sidebar-item">
                     <a href="{{route('setApp.index')}}" class='sidebar-link'>
                         <i data-feather="settings" width="20"></i>
                         <span>Settings</span>

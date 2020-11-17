@@ -30,7 +30,12 @@ Route::group(['prefix'=>'v1','namespace'=>'v1'], function(){
 	Route::get('getPemesanan/{id}','PemesananController@show');
 	Route::get('getPenawaran/{id}','PenawaranController@show');
 	Route::get('getPemesan/{id}','PemesananController@getPemesan');
+<<<<<<< HEAD
     Route::get('getManggaPenawaran/{id}','PenawaranController@getManggaPenawaran');
     Route::get('getNotif','NotifController@getNotif');
     Route::get('getStatus','NotifController@getStatus');
+=======
+	Route::get('getManggaPenawaran/{id}','PenawaranController@getManggaPenawaran');
+	Route::get('getByJenis/{id}','JenisManggaController@getByJenis');
+>>>>>>> 59cf8b2497b05b5faa582762b58d2da344f49d89
 });
