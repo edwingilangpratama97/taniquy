@@ -17,7 +17,7 @@ class CreateNotificationsTable extends Migration
             $table->id();
             $table->foreignId('id_pemesanan')->nullable()->constrained('pemesanans')->onDelete('set null');
             $table->foreignId('id_penawaran')->nullable()->constrained('penawarans')->onDelete('set null');
-            $table->dateTime('waktu');
+            $table->date('waktu');
             $table->enum('status',[0,1])->default(0);
             $table->timestamps();
         });

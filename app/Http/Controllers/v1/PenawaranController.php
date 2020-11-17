@@ -9,6 +9,7 @@ use App\Models\Kebutuhan;
 use App\Models\KelompokTani;
 use App\Models\Retailer;
 use App\Models\Mangga;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use Auth;
@@ -114,7 +115,7 @@ class PenawaranController extends Controller
                     'id_mangga' => $request->id_mangga
                 ]);
                 Notification::create([
-                    'id_pemesanan' => $create->id,
+                    'id_penawaran' => $create->id,
                     'waktu' => \Carbon\Carbon::now(),
                 ]);
             } elseif ($request->role == 'kelompok') {
@@ -129,7 +130,7 @@ class PenawaranController extends Controller
                     'id_mangga' => $request->id_mangga
                 ]);
                 Notification::create([
-                    'id_pemesanan' => $create->id,
+                    'id_penawaran' => $create->id,
                     'waktu' => \Carbon\Carbon::now(),
                 ]);
             }

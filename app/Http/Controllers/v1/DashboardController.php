@@ -50,8 +50,9 @@ class DashboardController extends Controller
             }
             return view('app.dashboard', compact('jenis','postinganRetailer'));
         } else {
+            $mangga = Mangga::all();
             // echo "Anda Sang Dewa";
-            return view('app.dashboard', compact('postinganKelompok','postinganRetailer','kebutuhanEnduser','kebutuhanRetailer'));
+            return view('app.dashboard', compact('mangga','jenis','postinganKelompok','postinganRetailer','kebutuhanEnduser','kebutuhanRetailer'));
         }
         // return view('app.dashboard');
     }
@@ -202,7 +203,7 @@ class DashboardController extends Controller
                 }
             }
         }
-        
+
         if ($data = true) {
             return redirect('v1/dashboard')->with('success',  __('Update Data Berhasil.'));
         } else {

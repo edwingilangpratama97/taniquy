@@ -22,7 +22,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix'=>'v1','namespace'=>'v1','middleware'=>'auth'], function(){
     Route::get('/dashboard','DashboardController@index')->name('dashboard');
-<<<<<<< HEAD
     Route::get('account','AuthController@account')->name('account');
     Route::get('updateAkunRetailer','AuthController@updateAccountRetailer')->name('updateAkunRetailer');
     Route::get('updateAkunKelompok','AuthController@updateAccountKelompok')->name('updateAkunKelompok');
@@ -43,7 +42,6 @@ Route::group(['prefix'=>'v1','namespace'=>'v1','middleware'=>'auth'], function()
 	Route::resource('mangga','ManggaController');
 	Route::resource('jenisMangga','JenisManggaController');
 	Route::resource('grade','GradeController');
-=======
     Route::post('postKebutuhan','KebutuhanController@postKebutuhan')->name('postKebutuhan');
     Route::post('postMangga','PostinganController@postMangga')->name('postMangga');
     Route::put('completeAccount/{id}','DashboardController@completeAccount')->name('completeAccount')->middleware('admin');
@@ -64,7 +62,6 @@ Route::group(['prefix'=>'v1','namespace'=>'v1','middleware'=>'auth'], function()
 	Route::resource('mangga','ManggaController')->middleware('admin');
 	Route::resource('jenisMangga','JenisManggaController')->middleware('admin');
 	Route::resource('grade','GradeController')->middleware('admin');
->>>>>>> 59cf8b2497b05b5faa582762b58d2da344f49d89
 	Route::resource('postingan','PostinganController');
 	Route::resource('pemesanan','PemesananController');
 	Route::resource('kebutuhan','KebutuhanController');

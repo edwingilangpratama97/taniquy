@@ -150,7 +150,7 @@
                         $('#kode').append(`
                             <div class="row">
                                 <div class="col-12">
-                                        Notifikasi Pemesanan !
+                                        Notifikasi Pemesanan !<br>
                                         Tanggal Pemesanan : ${b.waktu}
                                         <p style="font-size:13px;"> Kode Pemesanan : ${b.pemesanan.kode_pemesanan} <hr></p>
                                     </div>
@@ -161,7 +161,7 @@
                         $('#kode').append(`
                             <div class="row">
                                 <div class="col-12">
-                                        Notifikasi Penawaran !
+                                        Notifikasi Penawaran !<br>
                                         Tanggal Penawaran : ${b.waktu}
                                         <p style="font-size:13px;"> Kode Penawaran : ${b.penawaran.kode_penawaran} <hr></p>
                                     </div>
