@@ -38,6 +38,11 @@ class KebutuhanController extends Controller
         return view('app.kebutuhan.index');
     }
 
+    public function postKebutuhan(Request $request)
+    {
+        // dd($request->all());
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -94,7 +99,9 @@ class KebutuhanController extends Controller
                     'jumlah' => $request->jumlah
                 ]);
             }
-
+            if (Auth::user()->role != 'admin') {
+                return redirect('v1/dashboard')->with('success',  __('Post Berhasil.'));
+            }
             if ($create = true) {
                 return redirect('v1/kebutuhan')->with('success',  __('Create Data Berhasil.'));
             } else {

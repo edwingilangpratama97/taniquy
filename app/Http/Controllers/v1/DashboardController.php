@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\KelompokTani;
+use App\Models\Kebutuhan;
+use App\Models\Postingan;
 use App\Models\Retailer;
 use App\Models\Enduser;
 use App\Models\Provinsi;
+use App\Models\Mangga;
+use App\Models\JenisMangga;
 use App\User;
 use Auth;
 
@@ -22,25 +26,32 @@ class DashboardController extends Controller
     public function index()
     {
         $provinsi = Provinsi::all();
+        $jenis = JenisMangga::all();
         $auth = Auth::user();
+        $postinganKelompok = Postingan::with('kelompok')->where('id_kelompok','!=',null)->get();
+        $postinganRetailer = Postingan::with('retailer')->where('id_retailer','!=',null)->get();
+        $kebutuhanRetailer = Kebutuhan::with('retailer')->where('id_retailer','!=',null)->get();
+        $kebutuhanEnduser = Kebutuhan::with('enduser')->where('id_enduser','!=',null)->get();
         if ($auth->id_kelompok != null) {
+            $mangga = Mangga::where('id_kelompok', Auth::user()->id_kelompok)->get();
             if($auth->kelompok->kontak == null || $auth->kelompok->latitude == null || $auth->kelompok->longitude == null){
                 return view('app.account.complete', compact('provinsi','auth'));
             }
-            return view('app.dashboard');
+            return view('app.dashboard', compact('jenis','kebutuhanRetailer','mangga'));
         }else if ($auth->id_retailer != null) {
+            $mangga = Mangga::where('id_retailer', Auth::user()->id_retailer)->get();
             if($auth->retailer->kontak == null || $auth->retailer->latitude == null || $auth->retailer->longitude == null){
                 return view('app.account.complete', compact('provinsi','auth'));
             }
-            return view('app.dashboard');
+            return view('app.dashboard', compact('jenis','postinganKelompok','kebutuhanEnduser','mangga'));
         } elseif ($auth->id_enduser != null) {
             if($auth->enduser->kontak == null || $auth->enduser->latitude == null || $auth->enduser->longitude == null){
                 return view('app.account.complete', compact('provinsi','auth'));
             }
-            return view('app.dashboard');
+            return view('app.dashboard', compact('jenis','postinganRetailer'));
         } else {
             // echo "Anda Sang Dewa";
-            return view('app.dashboard');
+            return view('app.dashboard', compact('postinganKelompok','postinganRetailer','kebutuhanEnduser','kebutuhanRetailer'));
         }
         // return view('app.dashboard');
     }
@@ -169,11 +180,11 @@ class DashboardController extends Controller
                     $foto_ketua = time()."_".$name->getClientOriginalName();
                     $request->foto_ketua->move(public_path("upload/foto/kelompok"), $foto_ketua);
                     if ($request->desa == null) {
-                        $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
+                        $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude','ketua'),[
                             'foto_ketua' => 'upload/foto/kelompok/'.$foto_ketua
                         ]));
                     } else {
-                        $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
+                        $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude','ketua'),[
                             'foto_ketua' => 'upload/foto/kelompok/'.$foto_ketua,
                             'id_desa' => $request->desa
                         ]));
@@ -181,10 +192,10 @@ class DashboardController extends Controller
 
                 } else {
                     if ($request->desa == null) {
-                        $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude')));
+                        $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude','ketua')));
                     } else {
                         // dd($request->all());
-                        $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude'),[
+                        $data->update(array_merge($request->only('nama','jenis_usaha','kontak','alamat','latitude','longitude','ketua'),[
                             'id_desa' => $request->desa
                         ]));
                     }

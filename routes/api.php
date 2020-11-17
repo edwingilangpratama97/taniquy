@@ -31,4 +31,5 @@ Route::group(['prefix'=>'v1','namespace'=>'v1'], function(){
 	Route::get('getPenawaran/{id}','PenawaranController@show');
 	Route::get('getPemesan/{id}','PemesananController@getPemesan');
 	Route::get('getManggaPenawaran/{id}','PenawaranController@getManggaPenawaran');
+	Route::get('getByJenis/{id}','JenisManggaController@getByJenis');
 });
