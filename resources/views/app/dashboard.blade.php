@@ -1,11 +1,32 @@
+@php 
+    $mangga = \App\Models\Mangga::all();
+    $max = number_format($mangga->max('harga'),0,".",".");
+    $min = number_format($mangga->min('harga'),0,".",".");
+    $avg = number_format($mangga->avg('harga'),0,".",".");
+    // dd($avg);
+    $jmlPenawaran = \App\Models\Penawaran::where('status_pembayaran', 1)->get();
+    $jmlPemesanan = \App\Models\Pemesanan::where('status_pembayaran', 1)->get();
+    $jmpn = 0;
+    foreach($jmlPenawaran as $p){
+        $jmpn = $jmpn + $p->jumlah;
+    }
+    $jmpm = 0;
+    foreach($jmlPemesanan as $p){
+        $jmpm = $jmpm + $p->jumlah;
+    }
+
+    // dd($jmpn,$jmpm);
+    $jumlah = $jmpn + $jmpm;
+@endphp
 @extends('app.layouts.index')
 
 @section('content')
 <div class="page-title">
+    <h1 class="text-title">Dashboard</h1>
     <p class="text-subtitle text-muted">Data Statistik Penjualan Mangga</p>
 </div>
 <section class="section">
-    <div class="row mb-2">
+    <div class="row">
         <div class="col-12">
             @if (session()->has('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -25,14 +46,23 @@
             </div>
             @endif
         </div>
-        <div class="col-12 col-md-3">
+        <div class="col-6 col-md-3">
             <div class="card card-statistic success-before">
                 <div class="card-body p-0">
                     <div class="d-flex flex-column">
-                        <div class='px-3 py-3 d-flex justify-content-between'>
-                            <h3 class='card-title'>BALANCE</h3>
-                            <div class="card-right d-flex align-items-center">
-                                <p>$50 </p>
+                        <div class='px-3 py-3'>
+                            <div class="row">
+                                <div class="col-4 align-middle text-center text-success">
+                                    <i data-feather="trending-down" class="dashboard-item"></i>
+                                </div>
+                                <div class="col-8 text-right">
+                                    <div class="row">
+                                        <span class="dashboard-value float-right py-1">{{$min}}</span><br>
+                                    </div>
+                                    <div class="row">
+                                        <small class="float-right">Harga Terendah (Rp)</small>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         {{-- <div class="chart-wrapper">
@@ -42,14 +72,23 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-3">
+        <div class="col-6 col-md-3">
             <div class="card card-statistic danger-before">
                 <div class="card-body p-0">
                     <div class="d-flex flex-column">
-                        <div class='px-3 py-3 d-flex justify-content-between'>
-                            <h3 class='card-title'>Revenue</h3>
-                            <div class="card-right d-flex align-items-center">
-                                <p>$532,2 </p>
+                        <div class='px-3 py-3'>
+                            <div class="row">
+                                <div class="col-4 align-middle text-center text-danger">
+                                    <i data-feather="trending-up" class="dashboard-item"></i>
+                                </div>
+                                <div class="col-8 text-right">
+                                    <div class="row">
+                                        <span class="dashboard-value float-right py-1">{{$max}}</span><br>
+                                    </div>
+                                    <div class="row">
+                                        <small class="float-right">Harga Tertinggi (Rp)</small>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         {{-- <div class="chart-wrapper">
@@ -59,14 +98,23 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-3">
+        <div class="col-6 col-md-3">
             <div class="card card-statistic warning-before">
                 <div class="card-body p-0">
                     <div class="d-flex flex-column">
-                        <div class='px-3 py-3 d-flex justify-content-between'>
-                            <h3 class='card-title'>ORDERS</h3>
-                            <div class="card-right d-flex align-items-center">
-                                <p>1,544 </p>
+                        <div class='px-3 py-3'>
+                            <div class="row">
+                                <div class="col-4 align-middle text-center text-warning">
+                                    <i data-feather="bar-chart-2" class="dashboard-item"></i>
+                                </div>
+                                <div class="col-8 text-right">
+                                    <div class="row">
+                                        <span class="dashboard-value float-right py-1">{{$avg}}</span><br>
+                                    </div>
+                                    <div class="row">
+                                        <small class="float-right">Harga Rata Rata (Rp)</small>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         {{-- <div class="chart-wrapper">
@@ -76,14 +124,23 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-3">
+        <div class="col-6 col-md-3">
             <div class="card card-statistic primary-before">
                 <div class="card-body p-0">
                     <div class="d-flex flex-column">
-                        <div class='px-3 py-3 d-flex justify-content-between'>
-                            <h3 class='card-title'>Sales Today</h3>
-                            <div class="card-right d-flex align-items-center">
-                                <p>500 </p>
+                        <div class='px-3 py-3'>
+                            <div class="row">
+                                <div class="col-4 align-middle text-center text-primary">
+                                    <i data-feather="shopping-bag" class="dashboard-item"></i>
+                                </div>
+                                <div class="col-8 text-right">
+                                    <div class="row">
+                                        <span class="dashboard-value float-right py-1">{{$jumlah}}</span><br>
+                                    </div>
+                                    <div class="row">
+                                        <small class="float-right">Total Penjualan (Kg)</small>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         {{-- <div class="chart-wrapper">
@@ -91,6 +148,47 @@
                         </div> --}}
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <p class="text-subtitle text-muted">Filter</p>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="input-group mb-3">
+                <label class="input-group-text success" for="inputGroupSelect01">Jarak</label>
+                <select class="form-select" id="inputGroupSelect01">
+                    <option selected>Pilih...</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="input-group mb-3">
+                <label class="input-group-text danger" for="inputGroupSelect01">Jenis</label>
+                <select class="form-select" id="inputGroupSelect01">
+                    <option selected>Pilih...</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="input-group mb-3">
+                <span class="input-group-text warning" id="inputGroup-sizing-default">Harga (Rp)</span>
+                <input type="text" class="form-control" aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default">
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="input-group mb-3">
+                <span class="input-group-text primary" id="inputGroup-sizing-default">Daerah (Rp)</span>
+                <input type="text" class="form-control" aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default" placeholder="Kab/Kota">
             </div>
         </div>
     </div>
@@ -175,6 +273,150 @@
         @endif
     </div>
 </section>
+@if(Auth::user()->role == 'enduser')
+<div class="modal fade text-left" id="kebutuhan" tabindex="0" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+        <div class="modal-header bg-success">
+        <h5 class="modal-title white" id="myModalLabel110">Posting Kebutuhan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <i data-feather="x"></i>
+        </button>
+        </div>
+        <form action="{{route('kebutuhan.store')}}" method="post">
+        @csrf
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-12">
+                            @if(Auth::user()->role == 'retailer')
+                            <input type="hidden" name="pemesan" value="{{Auth::user()->id_retailer}}">
+                            @elseif(Auth::user()->role == 'enduser')
+                            <input type="hidden" name="pemesan" value="{{Auth::user()->id_enduser}}">
+                            @endif
+                            <input type="hidden" name="role" value="{{Auth::user()->role}}">
+                            <div class="form-group">
+                                <label for="jenis-select">Jenis Mangga</label>
+                                <select id="jenis-select" class="form-select @error('id_jenis') is-invalid @enderror" id="jenis-select" name="id_jenis">
+                                    <option value="">-- Pilih Disini --</option>
+                                    @foreach($jenis as $p)
+                                    <option value="{{$p->id}}">{{$p->nama}}</option>
+                                    @endforeach
+                                </select>
+                                @error('id_jenis')
+                                <div class="invalid-feedback">
+                                    <i class="bx bx-radio-circle"></i>
+                                    {{{$message}}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="jumlah" class="form-label">Jumlah</label>
+                                <input id="jumlah" type="text" name="jumlah" class="form-control @error('jumlah') is-invalid @enderror">
+                                @error('jumlah')
+                                <div class="invalid-feedback">
+                                    <i class="bx bx-radio-circle"></i>
+                                    {{{$message}}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <span>Saran Postingan Berdasarkan Kebutuhan Anda :</span>
+                    <hr>
+                    {{-- <div class="row"> --}}
+                        <div id="result-relevan"></div>
+                    {{-- </div> --}}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+            <i class="bx bx-x d-block d-sm-none"></i>
+            <span class="d-none d-sm-block">Close</span>
+        </button>
+
+        <button type="submit" class="btn btn-success ml-1">
+            <i class="bx bx-check d-block d-sm-none"></i>
+            <span class="d-none d-sm-block"><i data-feather="send"></i> Post</span>
+        </button>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
+@elseif(Auth::user()->role == 'kelompok')
+<div class="modal fade text-left" id="postingan" tabindex="0" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+        <div class="modal-header bg-warning">
+        <h5 class="modal-title white" id="myModalLabel110">Posting/Jual Mangga</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <i data-feather="x"></i>
+        </button>
+        </div>
+        <form action="{{route('postingan.store')}}" method="post">
+        @csrf
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12">
+                    @if(Auth::user()->role == 'retailer')
+                    <input type="hidden" name="penjual" value="{{Auth::user()->id_retailer}}">
+                    @elseif(Auth::user()->role == 'kelompok')
+                    <input type="hidden" name="penjual" value="{{Auth::user()->id_kelompok}}">
+                    @endif
+                    <input type="hidden" name="role" value="{{Auth::user()->role}}">
+                    <div class="form-group">
+                        <label for="jenis-select">Mangga</label>
+                        <select id="jenis-select" class="form-select @error('id_mangga') is-invalid @enderror" id="jenis-select" name="id_mangga">
+                            <option value="">-- Pilih Disini --</option>
+                            @foreach($mangga as $p)
+                            <option value="{{$p->id}}">{{$p->jenis->nama}}</option>
+                            @endforeach
+                        </select>
+                        @error('id_mangga')
+                        <div class="invalid-feedback">
+                            <i class="bx bx-radio-circle"></i>
+                            {{{$message}}}
+                        </div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="keterangan" class="form-label">Keterangan</label>
+                        <textarea id="keterangan" class="form-select @error('keterangan') is-invalid @enderror" name="keterangan" rows="6"></textarea>
+                        @error('keterangan')
+                        <div class="invalid-feedback">
+                            <i class="bx bx-radio-circle"></i>
+                            {{{$message}}}
+                        </div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+            <i class="bx bx-x d-block d-sm-none"></i>
+            <span class="d-none d-sm-block">Close</span>
+        </button>
+
+        <button type="submit" class="btn btn-warning ml-1">
+            <i class="bx bx-check d-block d-sm-none"></i>
+            <span class="d-none d-sm-block"><i data-feather="send"></i> Post</span>
+        </button>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
+@elseif(Auth::user()->role == 'retailer')
 <div class="modal fade text-left" id="kebutuhan" tabindex="0" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
     <div class="modal-content">
@@ -316,9 +558,12 @@
     </div>
     </div>
 </div>
+@endif
 @endsection
 @push('script')
 <script>
+    var auth = `{{Auth::user()->role}}`;
+    // console.log(auth);
     $('#jenis-select').change(function() {
         var valueJenis = $('#jenis-select').val();
         console.log('Jenis ID : '+valueJenis);
@@ -466,79 +711,437 @@
 
     // var greenIcon = new LeafIcon({iconUrl: '{{asset('images/green-marker.svg')}}'}),
     //     redIcon = new LeafIcon({iconUrl: '{{asset('images/red-marker.svg')}}'});
+    if(auth == 'kelompok'){
+        var kebutuhanRetailer = {!! json_encode($kebutuhanRetailer ?? '') !!}
+        var idBeforeRed = 0;
+        var isiRed = '';
+        kebutuhanRetailer.forEach(kebutuhanRetailerMarker)
+        function kebutuhanRetailerMarker(data, index) {
+            if (data.id_retailer == idBeforeRed) {
+                console.log(isiRed)
+                isiRed += `
+                <hr>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Membutuhkan</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.jenis.nama}</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Jumlah</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.jumlah}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Daerah</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.retailer.desa.kecamatan.nama}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Desa</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.retailer.desa.nama}</span>
+                    </div>
+                    <div class="col-12 pt-2 text-center">
+                        <a href="/v1/tawarKebutuhan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Tawarkan</a>
+                    </div>
+                </div>
+                    `
+                L.marker([data.retailer.latitude, data.retailer.longitude], {icon: redIcon}).bindPopup(isiRed).addTo(map)
+                isiRed = ''
+                // console.log(isiGreen)
+            } else {
+            isiRed = `
+            <div id="rowKel-${data.id_retailer}">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>${data.retailer.nama}</h4>
+                    </div>
+                    <div class="col-3">
+                        <span>Membutuhkan</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.jenis.nama}</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Jumlah</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.jumlah}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Daerah</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.retailer.desa.kecamatan.nama}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Desa</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.retailer.desa.nama}</span>
+                    </div>
+                    <div class="col-12 pt-2 text-center">
+                        <a href="/v1/tawarKebutuhan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Tawarkan</a>
+                    </div>
+                </div>
+            </div>
+            `
 
-    // var latitude = -1.205328
-    // var longitude = 113.451067
-    @if(Auth::user()->role == 'kelompok')
-    var kebutuhanRetailer = `{{$kebutuhanRetailer->toJson()}}`
-    @elseif(Auth::user()->role == 'retailer')
-    var postinganKelompok = $postinganKelompok
-    console.log(postinganKelompok)
-    var kebutuhanEnduser = `{{$kebutuhanEnduser}}`
-    // for (var i = 0; i < postinganKelompok.length; i++) {
-    //     console.log(postinganKelompok)
-    // }
-    // postinganKelompok.forEach(element => console.log(element))
-    function postinganKelompokMarker(data, index) {
-        var isiGreen = `
-            <div class="row">
-                <div class="col-12">
-                    <h4>Kios Bu Yati</h4>
-                </div>
-                <div class="col-6">
-                    <span>Menjual</span>
-                </div>
-                <div class="col-6">
-                    <span class="float-left">:</span>
-                    <span class="float-right">Mangga Harumanis</span>
-                </div>
-                <div class="col-6">
-                    <span>Harga/Kg</span>
-                </div>
-                <div class="col-6">
-                    <span class="float-left">:</span>
-                    <span class="float-right">10.500</span>
-                </div>
-                <div class="col-6">
-                    <span>Stok</span>
-                </div>
-                <div class="col-6">
-                    <span class="float-left">:</span>
-                    <span class="float-right">500 Kg</span>
-                </div>
-            </div>
-        `
-        L.marker([data.kelompok.latitude, data.kelompok.longitude], {icon: greenIcon}).bindPopup(isiGreen).addTo(map)
-    }
+            idBeforeRed = data.id_retailer
+            L.marker([data.retailer.latitude, data.retailer.longitude], {icon: redIcon}).bindPopup(isiRed).addTo(map)
+            }
+        }
 
-    var isiRed = `
-        <div class="row">
-            <div class="col-12">
-                <h4>Pa Dadang</h4>
-            </div>
-            <div class="col-6">
-                <span>Membutuhkan</span>
-            </div>
-            <div class="col-6">
-                <span class="float-left">:</span>
-                <span class="float-right">Mangga Muda</span>
-            </div>
-            <div class="col-6">
-                <span>Jumlah</span>
-            </div>
-            <div class="col-6">
-                <span class="float-left">:</span>
-                <span class="float-right">10 Kg</span>
-            </div>
-        </div>
-    `
+    } else if(auth == 'retailer') {
 
-    L.marker([latitude-5, longitude-5], {icon: redIcon}).bindPopup(isiRed).addTo(map);
+        var postinganKelompok = {!! json_encode($postinganKelompok ?? '') !!};
+        console.log(postinganKelompok);
+        var idBefore = 0;
+        var isiGreen = '';
+        postinganKelompok.forEach(postinganKelompokMarker)
+        function postinganKelompokMarker(data, index) {
+            if (data.id_kelompok == idBefore) {
+                // console.log('ini kedua')
+                isiGreen += `
+                <hr>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Menjual</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.mangga.jenis.nama}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Harga/Kg</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.mangga.harga}</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Stok</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.mangga.stok}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Daerah</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.kelompok.desa.kecamatan.nama}</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Keterangan</span>
+                    </div>
+                    <div class="col-9">
+                        <span class="float-left">:</span>
+                        <span class="float-right text-right">${data.keterangan}</span>
+                    </div>
+                    <div class="col-12 pt-2 text-center">
+                        <a href="/v1/pesanPostingan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Pesan</a>
+                    </div>
+                </div>
+                    `
+                L.marker([data.kelompok.latitude, data.kelompok.longitude], {icon: greenIcon}).bindPopup(isiGreen).addTo(map)
+                isiGreen = ''
+                // console.log(isiGreen)
+            } else {
+            isiGreen = `
+            <div id="rowKel-${data.id_kelompok}">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>${data.kelompok.nama}</h4>
+                    </div>
+                    <div class="col-3">
+                        <span>Menjual</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.mangga.jenis.nama}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Harga/Kg</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.mangga.harga}</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Stok</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.mangga.stok}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Daerah</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.kelompok.desa.kecamatan.nama}</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Keterangan</span>
+                    </div>
+                    <div class="col-9">
+                        <span class="float-left">:</span>
+                        <span class="float-right text-right">${data.keterangan}</span>
+                    </div>
+                    <div class="col-12 pt-2 text-center">
+                        <a href="/v1/pesanPostingan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Pesan</a>
+                    </div>
+                </div>
+            </div>
+            `
 
-    @elseif(Auth::user()->role == 'enduser')
-    var postinganRetailer = `{{$potinganRetailer}}`;
-    @endif
+            idBefore = data.id_kelompok
+            L.marker([data.kelompok.latitude, data.kelompok.longitude], {icon: greenIcon}).bindPopup(isiGreen).addTo(map)
+            }
+        }
+        var kebutuhanEnduser = {!! json_encode($kebutuhanEnduser ?? '') !!}
+        var idBeforeRed = 0;
+        var isiRed = '';
+        kebutuhanEnduser.forEach(kebutuhanEnduserMarker)
+        function kebutuhanEnduserMarker(data, index) {
+            if (data.id_enduser == idBeforeRed) {
+                // console.log('ini kedua')
+                isiRed += `
+                <hr>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Membutuhkan</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.jenis.nama}</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Jumlah</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.jumlah}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Daerah</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.enduser.desa.kecamatan.nama}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Desa</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.enduser.desa.nama}</span>
+                    </div>
+                    <div class="col-12 pt-2 text-center">
+                        <a href="/v1/tawarKebutuhan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Tawarkan</a>
+                    </div>
+                </div>
+                    `
+                L.marker([data.enduser.latitude, data.enduser.longitude], {icon: redIcon}).bindPopup(isiRed).addTo(map)
+                isiRed = ''
+                // console.log(isiGreen)
+            } else {
+            isiRed = `
+            <div id="rowKel-${data.id_enduser}">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>${data.enduser.nama}</h4>
+                    </div>
+                    <div class="col-3">
+                        <span>Membutuhkan</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.jenis.nama}</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Jumlah</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.jumlah}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Daerah</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.enduser.desa.kecamatan.nama}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Desa</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.enduser.desa.nama}</span>
+                    </div>
+                    <div class="col-12 pt-2 text-center">
+                        <a href="/v1/tawarKebutuhan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Tawarkan</a>
+                    </div>
+                </div>
+            </div>
+            `
 
+            idBeforeRed = data.id_enduser
+            L.marker([data.enduser.latitude, data.enduser.longitude], {icon: redIcon}).bindPopup(isiRed).addTo(map)
+            }
+        }
+        // console.log(isiGreen)
+
+
+    } else if(auth == 'enduser'){
+        var postinganRetailer = {!! json_encode($postinganRetailer ?? '') !!};
+        console.log(postinganRetailer);
+        var idBefore = 0;
+        var isiGreen = '';
+        postinganRetailer.forEach(postinganRetailerMarker)
+        function postinganRetailerMarker(data, index) {
+            if (data.id_retailer == idBefore) {
+                // console.log('ini kedua')
+                isiGreen += `
+                <hr>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Menjual</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.mangga.jenis.nama}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Harga/Kg</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.mangga.harga}</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Stok</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.mangga.stok}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Daerah</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.retailer.desa.kecamatan.nama}</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Keterangan</span>
+                    </div>
+                    <div class="col-9">
+                        <span class="float-left">:</span>
+                        <span class="float-right text-right">${data.keterangan}</span>
+                    </div>
+                    <div class="col-12 pt-2 text-center">
+                        <a href="/v1/pesanPostingan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Pesan</a>
+                    </div>
+                </div>
+                    `
+                L.marker([data.retailer.latitude, data.retailer.longitude], {icon: greenIcon}).bindPopup(isiGreen).addTo(map)
+                isiGreen = ''
+                // console.log(isiGreen)
+            } else {
+            isiGreen = `
+            <div id="rowKel-${data.id_retailer}">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>${data.retailer.nama}</h4>
+                    </div>
+                    <div class="col-3">
+                        <span>Menjual</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.mangga.jenis.nama}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Harga/Kg</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.mangga.harga}</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Stok</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.mangga.stok}</span>
+                    </div>
+                    <div class="col-3 border-left">
+                        <span>Daerah</span>
+                    </div>
+                    <div class="col-3">
+                        <span class="float-left">:</span>
+                        <span class="float-right">${data.retailer.desa.kecamatan.nama}</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Keterangan</span>
+                    </div>
+                    <div class="col-9">
+                        <span class="float-left">:</span>
+                        <span class="float-right text-right">${data.keterangan}</span>
+                    </div>
+                    <div class="col-12 pt-2 text-center">
+                        <a href="/v1/pesanPostingan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Pesan</a>
+                    </div>
+                </div>
+            </div>
+            `
+
+            idBefore = data.id_retailer
+            L.marker([data.retailer.latitude, data.retailer.longitude], {icon: greenIcon}).bindPopup(isiGreen).addTo(map)
+            }
+        }
+    } 
+
+    // var isiRed = `
+    //     <div class="row">
+    //         <div class="col-12">
+    //             <h4>Pa Dadang</h4>
+    //         </div>
+    //         <div class="col-6">
+    //             <span>Membutuhkan</span>
+    //         </div>
+    //         <div class="col-6">
+    //             <span class="float-left">:</span>
+    //             <span class="float-right">Mangga Muda</span>
+    //         </div>
+    //         <div class="col-6">
+    //             <span>Jumlah</span>
+    //         </div>
+    //         <div class="col-6">
+    //             <span class="float-left">:</span>
+    //             <span class="float-right">10 Kg</span>
+    //         </div>
+    //     </div>
+    // `;
+
+    // L.marker([latitude-5, longitude-5], {icon: redIcon}).bindPopup(isiRed).addTo(map);
     L.control.layers(baseLayers).addTo(map);
     // L.marker([-1.605328, 117.451067]).addTo(map);
 
