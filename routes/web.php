@@ -35,6 +35,14 @@ Route::group(['prefix'=>'v1','namespace'=>'v1','middleware'=>'auth'], function()
     Route::put('updatePassword/{id}','AuthController@actionUpdatePassword')->name('actionUpdatePassword');
     Route::get('notif','NotifController@notif')->name('notif');
     Route::post('clickNotif','NotifController@clickNotif')->name('clickNotifikasi');
+    Route::get('laporanPemesanan','LaporanController@pemesanan')->name('laporan.pemesanan');
+    Route::post('laporanPemesananPDF','LaporanController@PdfPemesanan')->name('laporan.pemesanan.pdf');
+    Route::get('laporanPenawaran','LaporanController@penawaran')->name('laporan.penawaran');
+    Route::post('laporanPenawaranPDF','LaporanController@PdfPenawaran')->name('laporan.penawaran.pdf');
+    Route::get('laporanPostingan','LaporanController@postingan')->name('laporan.postingan');
+    Route::post('laporanPostinganPDF','LaporanController@PdfPostingan')->name('laporan.postingan.pdf');
+    Route::get('laporanKebutuhan','LaporanController@kebutuhan')->name('laporan.kebutuhan');
+    Route::post('laporanKebutuhanPDF','LaporanController@PdfKebutuhan')->name('laporan.kebutuhan.pdf');
 
 	Route::resource('kelompok','KelompokTaniController');
 	Route::resource('retailer','RetailerController');

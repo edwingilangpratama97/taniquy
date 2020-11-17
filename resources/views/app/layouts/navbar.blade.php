@@ -11,14 +11,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav d-flex align-items-center navbar-light ml-auto">
             <li class="dropdown nav-icon">
-                @if ($notif->count() > 0)
-                <button type="button" style="color:red" class="btn btn-default mdi mdi-bell-outline mdi-24px close" id="bell" onclick="getNotif()" data-toggle="modal" data-target="#small">
-                        {{-- <span class="badge badge-danger">{{ $notif->count() }}</span> --}}
-                </button>
-                @else
-                <button type="button" style="color:black" class="btn btn-default mdi mdi-bell-outline mdi-bg-primary mdi-24px close" id="bell" onclick="getNotif()" data-toggle="modal" data-target="#small">
-                </button>
-                @endif
+               @if (Auth::user()->role == 'admin' || Auth::user()->role == 'retailer' || Auth::user()->role == 'kelompok')
+                    @if ($notif->count() > 0)
+                        <button type="button" style="color:red" class="btn btn-default mdi mdi-bell-outline mdi-24px close" id="bell" onclick="getNotif()" data-toggle="modal" data-target="#small">
+                                {{-- <span class="badge badge-danger">{{ $notif->count() }}</span> --}}
+                        </button>
+                    @else
+                        <button type="button" style="color:black" class="btn btn-default mdi mdi-bell-outline mdi-bg-primary mdi-24px close" id="bell" onclick="getNotif()" data-toggle="modal" data-target="#small">
+                        </button>
+                    @endif
+               @endif
                     <!--small size modal -->
                     <div class="modal fade text-left" id="small" tabindex="-1" role="dialog" aria-labelledby="myModalLabel19"
                     aria-hidden="true">
