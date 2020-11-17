@@ -1,3 +1,7 @@
+@php
+    $notif = App\Models\Notification::where('status','=','0')->get();
+    // dd($notif);
+@endphp
 <nav class="navbar navbar-header navbar-expand navbar-light">
     <a class="sidebar-toggler" href="#"><span class="navbar-toggler-icon"></span></a>
     <button class="btn navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -6,12 +10,36 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav d-flex align-items-center navbar-light ml-auto">
-            <li class="dropdown nav-icon mr-2">
-                <a href="#" data-toggle="dropdown" class="nav-link  dropdown-toggle nav-link-lg nav-link-user">
-                    <div class="d-lg-inline-block">
-                        <i data-feather="mail"></i>
+            <li class="dropdown nav-icon">
+                @if ($notif->count() > 0)
+                <button type="button" style="color:red" class="btn btn-default mdi mdi-bell-outline mdi-24px close" id="bell" onclick="getNotif()" data-toggle="modal" data-target="#small">
+                        {{-- <span class="badge badge-danger">{{ $notif->count() }}</span> --}}
+                </button>
+                @else
+                <button type="button" style="color:black" class="btn btn-default mdi mdi-bell-outline mdi-bg-primary mdi-24px close" id="bell" onclick="getNotif()" data-toggle="modal" data-target="#small">
+                </button>
+                @endif
+                    <!--small size modal -->
+                    <div class="modal fade text-left" id="small" tabindex="-1" role="dialog" aria-labelledby="myModalLabel19"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="row">
+                                <div class="col-md-12" id="loading">
+                                    <div id="kode"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
                     </div>
-                </a>
+                </div>
+            </li>
+            <li class="dropdown nav-icon mr-2">
                 <div class="dropdown-menu dropdown-menu-right">
                     <a class="dropdown-item" href="#"><i data-feather="user"></i> Account</a>
                     <a class="dropdown-item" href="#"><i data-feather="mail"></i> Messages</a>
@@ -52,3 +80,103 @@
         </ul>
     </div>
 </nav>
+@push('script')
+    <script>
+        // setInterval(function(){
+        //     $.get('/api/v1/getStatus',{},function(results){
+        //         if ($(results).length) {
+        //             $("#bell").each(function(){
+
+        //             })
+        //         }
+        //     })
+        // })
+        function getBell(){
+            $.ajax({
+                type:'GET',
+                url:'/api/v1/getStatus',
+                dataType:'json',
+                    success:function(bell){
+                        // console.log(bell)
+                        if (bell.data.length > 0) {
+                            $('#bell').css({"color":"red"})
+                        } else{
+                            $('#bell').css({"color":"black"})
+                        }
+                    }
+            });
+        }
+        var getMessage = function(){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type:'POST',
+                url: '{{route('clickNotifikasi')}}',
+                dataType:'json',
+                    success:function(data){
+                    // console.log(data); //Please share cosnole data
+                    if(data.msg) //Check the data.msg isset?
+                    {
+                        $("#msg").html(data.msg); //replace html by data.msg
+                    }
+
+                }
+            });
+        }
+
+       function getNotif(){
+        getMessage();
+        $('#loading').append(`
+            <center>
+                <div class="spinner-grow" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </center>
+        `)
+        $('#kode').html("")
+            $.ajax({
+            url: '/api/v1/getNotif',
+            type: 'GET',
+            cache: false,
+            dataType: 'json',
+            success: function(response) {
+                // console.log(response);
+
+                $.each(response.data, function(a,b){
+                    if (b.id_pemesanan != null) {
+                        $('#kode').append(`
+                            <div class="row">
+                                <div class="col-12">
+                                        Notifikasi Pemesanan !<br>
+                                        Tanggal Pemesanan : ${b.waktu}
+                                        <p style="font-size:13px;"> Kode Pemesanan : ${b.pemesanan.kode_pemesanan} <hr></p>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    }else if (b.id_penawaran != null) {
+                        $('#kode').append(`
+                            <div class="row">
+                                <div class="col-12">
+                                        Notifikasi Penawaran !<br>
+                                        Tanggal Penawaran : ${b.waktu}
+                                        <p style="font-size:13px;"> Kode Penawaran : ${b.penawaran.kode_penawaran} <hr></p>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+
+                    }
+                })
+                $('.spinner-grow').remove()
+                }
+            });
+       }
+       setInterval(() => {
+        getBell()
+       }, 5000);
+    </script>
+@endpush

@@ -22,6 +22,26 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix'=>'v1','namespace'=>'v1','middleware'=>'auth'], function(){
     Route::get('/dashboard','DashboardController@index')->name('dashboard');
+    Route::get('account','AuthController@account')->name('account');
+    Route::get('updateAkunRetailer','AuthController@updateAccountRetailer')->name('updateAkunRetailer');
+    Route::get('updateAkunKelompok','AuthController@updateAccountKelompok')->name('updateAkunKelompok');
+    Route::get('updateAkunEnduser','AuthController@updateAccountEnduser')->name('updateAkunEnduser');
+    Route::get('updateAkunAdmin','AuthController@updateAccountAdmin')->name('updateAkunAdmin');
+    Route::put('updateAccountRetailer/{id}','AuthController@updateAkunRetailer')->name('updateAccountRetailer');
+    Route::put('updateAccountKelompok/{id}','AuthController@updateAkunKelompok')->name('updateAccountKelompok');
+    Route::put('updateAccountEnduser/{id}','AuthController@updateAkunEnduser')->name('updateAccountEnduser');
+    Route::put('updateAccountAdmin/{id}','AuthController@updateAkunAdmin')->name('updateAccountAdmin');
+    Route::get('updatePassword','AuthController@updatePassword')->name('updatePassword');
+    Route::put('updatePassword/{id}','AuthController@actionUpdatePassword')->name('actionUpdatePassword');
+    Route::get('notif','NotifController@notif')->name('notif');
+    Route::post('clickNotif','NotifController@clickNotif')->name('clickNotifikasi');
+
+	Route::resource('kelompok','KelompokTaniController');
+	Route::resource('retailer','RetailerController');
+	Route::resource('customer','EndUserController');
+	Route::resource('mangga','ManggaController');
+	Route::resource('jenisMangga','JenisManggaController');
+	Route::resource('grade','GradeController');
     Route::post('postKebutuhan','KebutuhanController@postKebutuhan')->name('postKebutuhan');
     Route::post('postMangga','PostinganController@postMangga')->name('postMangga');
     Route::put('completeAccount/{id}','DashboardController@completeAccount')->name('completeAccount')->middleware('admin');
