@@ -135,11 +135,21 @@ class PenawaranController extends Controller
                 ]);
             }
 
-            if ($create = true) {
-                return redirect('v1/penawaran')->with('success',  __('Create Data Berhasil.'));
+            if(Auth::user()->role != 'admin'){
+                if ($create = true) {
+                    return redirect('v1/dashboard')->with('success',  __('Penawaran Berhasil.'));
+                } else {
+                    return redirect('v1/dashboard')->with('failed',  __('Penawaran Gagal.'));
+                }
             } else {
-                return redirect('v1/penawaran')->with('failed',  __('Create Data Gagal.'));
+                if ($create = true) {
+                    return redirect('v1/penawaran')->with('success',  __('Create Data Berhasil.'));
+                } else {
+                    return redirect('v1/penawaran')->with('failed',  __('Create Data Gagal.'));
+                }
             }
+
+            
         }
     }
 
