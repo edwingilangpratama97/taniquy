@@ -25,6 +25,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        // dd(Auth::user()->retailer);
         $provinsi = Provinsi::all();
         $jenis = JenisMangga::all();
         $auth = Auth::user();

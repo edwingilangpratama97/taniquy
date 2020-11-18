@@ -141,10 +141,18 @@ class PemesananController extends Controller
                 ]);
             }
 
-            if ($create = true) {
-                return redirect('v1/pemesanan')->with('success',  __('Create Data Berhasil.'));
+            if(Auth::user()->role != 'admin'){
+                if ($create = true) {
+                    return redirect('v1/dashboard')->with('success',  __('Pemesanan Berhasil.'));
+                } else {
+                    return redirect('v1/dashboard')->with('failed',  __('Pemesanan Gagal.'));
+                }
             } else {
-                return redirect('v1/pemesanan')->with('failed',  __('Create Data Gagal.'));
+                if ($create = true) {
+                    return redirect('v1/pemesanan')->with('success',  __('Create Data Berhasil.'));
+                } else {
+                    return redirect('v1/pemesanan')->with('failed',  __('Create Data Gagal.'));
+                }
             }
         }
 

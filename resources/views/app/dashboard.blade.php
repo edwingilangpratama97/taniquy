@@ -17,6 +17,20 @@
 
     // dd($jmpn,$jmpm);
     $jumlah = $jmpn + $jmpm;
+    $role = Auth::user()->role;
+    if ($role == 'admin') {
+        $latitudeBase = -1.605328;
+        $longitudeBase = 117.451067;
+    } elseif ($role == 'kelompok') {
+        $latitudeBase = Auth::user()->kelompok->lantitude;
+        $longitudeBase = Auth::user()->kelompok->longitude;
+    } elseif ($role == 'retailer') {
+        $latitudeBase = Auth::user()->retailer->lantitude;
+        $longitudeBase = Auth::user()->retailer->longitude;
+    } elseif ($role == 'enduser') {
+        $latitudeBase = Auth::user()->enduser->lantitude;
+        $longitudeBase = Auth::user()->enduser->longitude;
+    }
 @endphp
 @extends('app.layouts.index')
 
@@ -153,16 +167,16 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <p class="text-subtitle text-muted">Filter</p>
+            <p class="text-subtitle text-muted">Filter Postingan</p>
         </div>
         <div class="col-6 col-md-3">
             <div class="input-group mb-3">
                 <label class="input-group-text success" for="inputGroupSelect01">Jarak</label>
                 <select class="form-select" id="inputGroupSelect01">
                     <option selected>Pilih...</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option value="1">< 1Km</option>
+                    <option value="2">1Km - 10Km</option>
+                    <option value="3">10Km - 20Km</option>
                 </select>
             </div>
         </div>
@@ -171,9 +185,9 @@
                 <label class="input-group-text danger" for="inputGroupSelect01">Jenis</label>
                 <select class="form-select" id="inputGroupSelect01">
                     <option selected>Pilih...</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    @foreach($jenis as $j)
+                    <option value="{{$j->id}}">{{$j->nama}}</option>
+                    @endforeach
                 </select>
             </div>
         </div>
@@ -558,10 +572,123 @@
     </div>
     </div>
 </div>
+<div class="modal fade text-left" id="pemesanan" tabindex="0" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+        <div class="modal-header bg-success">
+        <h5 class="modal-title white" id="myModalLabel110">Pesan Mangga</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <i data-feather="x"></i>
+        </button>
+        </div>
+        <form action="{{route('pemesanan.store')}}" method="post">
+        @csrf
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12">
+                    <input type="hidden" name="id_postingan" id="id_postingan_modal">
+                    @if(Auth::user()->role == 'retailer')
+                    <input type="hidden" name="pemesan" value="{{Auth::user()->id_retailer}}">
+                    @elseif(Auth::user()->role == 'enduser')
+                    <input type="hidden" name="pemesan" value="{{Auth::user()->id_enduser}}">
+                    @endif
+                    <input type="hidden" name="role" value="{{Auth::user()->role}}">
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="jumlah" class="form-label">Jumlah</label>
+                        <input id="jumlah" type="text" name="jumlah" class="form-control @error('jumlah') is-invalid @enderror">
+                        @error('jumlah')
+                        <div class="invalid-feedback">
+                            <i class="bx bx-radio-circle"></i>
+                            {{{$message}}}
+                        </div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+            <i class="bx bx-x d-block d-sm-none"></i>
+            <span class="d-none d-sm-block">Close</span>
+        </button>
+
+        <button type="submit" class="btn btn-success ml-1">
+            <i class="bx bx-check d-block d-sm-none"></i>
+            <span class="d-none d-sm-block"><i data-feather="send"></i> Post</span>
+        </button>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
+<div class="modal fade text-left" id="penawaran" tabindex="0" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+        <div class="modal-header bg-warning">
+        <h5 class="modal-title white" id="myModalLabel110">Tawarkan Mangga</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <i data-feather="x"></i>
+        </button>
+        </div>
+        <form action="{{route('penawaran.store')}}" method="post">
+        @csrf
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12">
+                    <input type="hidden" name="id_kebutuhan" id="id_kebutuhan_modal">
+                    @if(Auth::user()->role == 'retailer')
+                    <input type="hidden" name="penjual" value="{{Auth::user()->id_retailer}}">
+                    @elseif(Auth::user()->role == 'kelompok')
+                    <input type="hidden" name="penjual" value="{{Auth::user()->id_kelompok}}">
+                    @endif
+                    <input type="hidden" name="role" value="{{Auth::user()->role}}">
+                    <div class="form-group">
+                        <label for="jenis-select">Mangga</label>
+                        <select id="jenis-select" class="form-select @error('id_mangga') is-invalid @enderror" id="jenis-select" name="id_mangga">
+                            <option value="">-- Pilih Disini --</option>
+                            @foreach($mangga as $p)
+                            <option value="{{$p->id}}">{{$p->jenis->nama}}</option>
+                            @endforeach
+                        </select>
+                        @error('id_mangga')
+                        <div class="invalid-feedback">
+                            <i class="bx bx-radio-circle"></i>
+                            {{{$message}}}
+                        </div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+            <i class="bx bx-x d-block d-sm-none"></i>
+            <span class="d-none d-sm-block">Close</span>
+        </button>
+
+        <button type="submit" class="btn btn-warning ml-1">
+            <i class="bx bx-check d-block d-sm-none"></i>
+            <span class="d-none d-sm-block"><i data-feather="send"></i> Post</span>
+        </button>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
 @endif
 @endsection
 @push('script')
 <script>
+    function fillPenawaran(id){
+        console.log('ID Kebutuhan '+id);
+        $('#id_kebutuhan_modal').val(id);
+    }
+    function fillPemesanan(id){
+        $('#id_postingan_modal').val(id);
+        console.log('ID Postingan '+id);
+    }
     var auth = `{{Auth::user()->role}}`;
     // console.log(auth);
     $('#jenis-select').change(function() {
@@ -642,7 +769,7 @@
                         </div>
                         <div class="col-12 mt-2">
                             <a href="#" class="float-right">
-                                <button type="button" class="btn btn-success">Pesan</button>
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#pemesanan" onclick="fillPemesanan(${element.id})" data-dismiss="modal">Pesan</button>
                             </a>
                         </div>
                         </div>
@@ -669,9 +796,11 @@
     var grayscale   = L.tileLayer(mbUrl, {id: 'mapbox/light-v9', tileSize: 512, zoomOffset: -1}),
         streets  = L.tileLayer(mbUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1});
 
+    var latitudeBase = `{{$latitudeBase}}`;
+    var longitudeBase = `{{$longitudeBase}}`;
     var map = L.map('map', {
-        center: [-1.605328, 117.451067],
-        zoom: 5,
+        center: [latitudeBase, longitudeBase],
+        zoom: 8,
         layers: [streets]
     });
 
@@ -751,7 +880,7 @@
                         <span class="float-right">${data.retailer.desa.nama}</span>
                     </div>
                     <div class="col-12 pt-2 text-center">
-                        <a href="/v1/tawarKebutuhan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Tawarkan</a>
+                        <button data-toggle="modal" data-target="#penawaran" onclick="fillPenawaran(${data.id})" class="btn btn-sm btn-success" style="width: 50%;">Tawarkan</button>
                     </div>
                 </div>
                     `
@@ -794,7 +923,7 @@
                         <span class="float-right">${data.retailer.desa.nama}</span>
                     </div>
                     <div class="col-12 pt-2 text-center">
-                        <a href="/v1/tawarKebutuhan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Tawarkan</a>
+                        <button data-toggle="modal" data-target="#penawaran" onclick="fillPenawaran(${data.id})" class="btn btn-sm btn-success" style="width: 50%;">Tawarkan</button>
                     </div>
                 </div>
             </div>
@@ -854,7 +983,7 @@
                         <span class="float-right text-right">${data.keterangan}</span>
                     </div>
                     <div class="col-12 pt-2 text-center">
-                        <a href="/v1/pesanPostingan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Pesan</a>
+                        <button data-toggle="modal" data-target="#pemesanan" onclick="fillPemesanan(${data.id})" class="btn btn-sm btn-success" style="width: 50%;">Pesan</button>
                     </div>
                 </div>
                     `
@@ -904,7 +1033,7 @@
                         <span class="float-right text-right">${data.keterangan}</span>
                     </div>
                     <div class="col-12 pt-2 text-center">
-                        <a href="/v1/pesanPostingan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Pesan</a>
+                        <button data-toggle="modal" data-target="#pemesanan" onclick="fillPemesanan(${data.id})" class="btn btn-sm btn-success" style="width: 50%;">Pesan</button>
                     </div>
                 </div>
             </div>
@@ -953,7 +1082,7 @@
                         <span class="float-right">${data.enduser.desa.nama}</span>
                     </div>
                     <div class="col-12 pt-2 text-center">
-                        <a href="/v1/tawarKebutuhan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Tawarkan</a>
+                        <button data-toggle="modal" data-target="#penawaran" onclick="fillPenawaran(${data.id})" class="btn btn-sm btn-success" style="width: 50%;">Tawarkan</button>
                     </div>
                 </div>
                     `
@@ -996,7 +1125,7 @@
                         <span class="float-right">${data.enduser.desa.nama}</span>
                     </div>
                     <div class="col-12 pt-2 text-center">
-                        <a href="/v1/tawarKebutuhan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Tawarkan</a>
+                        <button data-toggle="modal" data-target="#penawaran" onclick="fillPenawaran(${data.id})" class="btn btn-sm btn-success" style="width: 50%;">Tawarkan</button>
                     </div>
                 </div>
             </div>
@@ -1057,7 +1186,7 @@
                         <span class="float-right text-right">${data.keterangan}</span>
                     </div>
                     <div class="col-12 pt-2 text-center">
-                        <a href="/v1/pesanPostingan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Pesan</a>
+                        <button data-toggle="modal" data-target="#pemesanan" onclick="fillPemesanan(${data.id})" class="btn btn-sm btn-success" style="width: 50%;">Pesan</button>
                     </div>
                 </div>
                     `
@@ -1107,7 +1236,7 @@
                         <span class="float-right text-right">${data.keterangan}</span>
                     </div>
                     <div class="col-12 pt-2 text-center">
-                        <a href="/v1/pesanPostingan/${data.id}" class="btn btn-sm btn-success" style="width: 50%;">Pesan</a>
+                        <button data-toggle="modal" data-target="#pemesanan" onclick="fillPemesanan(${data.id})" class="btn btn-sm btn-success" style="width: 50%;">Pesan</button>
                     </div>
                 </div>
             </div>
